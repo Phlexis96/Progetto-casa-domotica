@@ -20,13 +20,13 @@ void Fluci_esterni(){
     if(luci_esterni==9){
       digitalWrite(5,HIGH);
     }
-    if(luci_esterni==10){
+    else if(luci_esterni==10){
       digitalWrite(5,LOW);
     }
+    else if(luci_esterni==100) checkmenu=true;
 }
 void Fluci_interni(){
   if(Serial.available())luci_interni=Serial.read();
-  if(luci_interni==0) checkmenu=true;
   if(luci_interni==1){
     digitalWrite(2, LOW);
     digitalWrite(3, LOW);
@@ -67,17 +67,18 @@ void Fluci_interni(){
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
   }
+  else if(luci_interni==100) checkmenu=true;
 }
 void loop() {
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
   }
   if(menu==11){        //Menu delle luci interne
-    Fluci_interni(); //Funzione che controlla le luci interne
     checkmenu=false;
+    Fluci_interni(); //Funzione che controlla le luci interne
   }
   if(menu==13){ //menu luci esterne
-    Fluci_esterni();
     checkmenu=false;
+    Fluci_esterni();
   }
 }

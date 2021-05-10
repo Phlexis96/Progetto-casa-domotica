@@ -111,26 +111,26 @@ void luceinterno(){
   text(" INDIETRO",larghezza/2-65,altezza-20);
   textSize(40);
   //prima lampadina
-  ellipse(larghezza/2-10,altezza/5-100,100,100);
-  rect(larghezza/2-35,altezza/5-70,50,55,10);
-  rect(larghezza/2-32,altezza/5-10,44,5,10);
-  rect(larghezza/2-32,altezza/5,44,5,10);
-  rect(larghezza/2-32,altezza/5+10,44,5,10);
-  text("  LUCE\nCUCINA",larghezza/2-83,altezza/5+60);
+  ellipse(larghezza/2-10,altezza/5-150,100,100);
+  rect(larghezza/2-35,altezza/5-120,50,55,10);
+  rect(larghezza/2-32,altezza/5-60,44,5,10);
+  rect(larghezza/2-32,altezza/5-50,44,5,10);
+  rect(larghezza/2-32,altezza/5-40,44,5,10);
+  text("  LUCE\nCUCINA",larghezza/2-83,altezza/5+10);
   //seconda lampadina
-  ellipse(larghezza/2-10,altezza/5*2.7-100,100,100);
-  rect(larghezza/2-35,altezza/5*2.7-70,50,55,10);
-  rect(larghezza/2-32,altezza/5*2.7-10,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7+10,44,5,10);
-  text("  LUCE\nSALONE",larghezza/2-83,altezza/5*2.7+60);
+  ellipse(larghezza/2-10,altezza/5*2.7-150,100,100);
+  rect(larghezza/2-35,altezza/5*2.7-120,50,55,10);
+  rect(larghezza/2-32,altezza/5*2.7-60,44,5,10);
+  rect(larghezza/2-32,altezza/5*2.7-50,44,5,10);
+  rect(larghezza/2-32,altezza/5*2.7-40,44,5,10);
+  text("  LUCE\nSALONE",larghezza/2-83,altezza/5*2.7+10);
   //terza lampadina
-  ellipse(larghezza/2-10,altezza/5*4.3-100,100,100);
-  rect(larghezza/2-35,altezza/5*4.3-70,50,55,10);
-  rect(larghezza/2-32,altezza/5*4.3-10,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3+10,44,5,10);
-  text("   LUCE\n GARAGE",larghezza/2-95,altezza/5*4.3+60);
+  ellipse(larghezza/2-10,altezza/5*4.3-150,100,100);
+  rect(larghezza/2-35,altezza/5*4.3-120,50,55,10);
+  rect(larghezza/2-32,altezza/5*4.3-60,44,5,10);
+  rect(larghezza/2-32,altezza/5*4.3-50,44,5,10);
+  rect(larghezza/2-32,altezza/5*4.3-40,44,5,10);
+  text("   LUCE\n GARAGE",larghezza/2-95,altezza/5*4.3+10);
   strokeWeight(1);
 }
 
@@ -265,6 +265,7 @@ public class Button {
       clicked_luce_esterno=!clicked_luce_esterno;
       a="ciao3";
       println(a);
+      port.write(13);
     }
   }
   public void clicked_cancello(int mx, int my){
@@ -403,6 +404,8 @@ public class Button {
       clicked_luci_esterno=!clicked_luci_esterno;
       a="ciao10";
       println(a);
+      if(clicked_luci_esterno==true) port.write(9);
+      else port.write(10);
     }
   }
     public void clicked_indietro(int mx, int my){
@@ -415,6 +418,7 @@ public class Button {
       tastogarage=false;
       a="ciao8";
       println(a);
+      port.write(100);
     }
   }
 }
