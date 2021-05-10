@@ -13,6 +13,7 @@ boolean clicked_luce_salone=false;  //luce salone menù luci
 boolean clicked_luce_garage=false;  //luce garage menù luci
 boolean clicked_porta_garage_apertura=false;  //porta garage menù garage
 boolean clicked_luci_esterno=false;  //luci esterno menù luci esterno
+boolean clicked_automazione=false;  //automazione luci esterno
 boolean tastiluci=false;
 boolean tastogarage=false;
 boolean tastoluciesterne=false;
@@ -168,16 +169,25 @@ void luciesterno(){
   int larghezza=width, altezza=height;
   if(clicked_luci_esterno==true) fill(0,255,50);
   else fill(0,120,10);
-  rect(0,0,larghezza,altezza);
+  rect(0,0,larghezza/2-1,altezza);
+  if(clicked_automazione==true) fill(0,255,50);
+  else fill(0,120,10);
+  rect(larghezza/2+1,0,larghezza,altezza);
+  //Lampadina
   fill(0);
-  ellipse(larghezza/2,altezza/2-100,200,200);
-  rect(larghezza/2-50,altezza/2-70,100,110,10);
-  rect(larghezza/2-44,altezza/2+50,88,10,10);
-  rect(larghezza/2-44,altezza/2+70,88,10,10);
-  rect(larghezza/2-44,altezza/2+90,88,10,10);
+  ellipse(larghezza/4,altezza/2-100,200,200);
+  rect(larghezza/4-50,altezza/2-70,100,110,10);
+  rect(larghezza/4-44,altezza/2+50,88,10,10);
+  rect(larghezza/4-44,altezza/2+70,88,10,10);
+  rect(larghezza/4-44,altezza/2+90,88,10,10);
   fill(130);
   rect(0,altezza-(altezza/25),larghezza,altezza/25);
   fill(0);
+  textSize(40);
+  text("   LUCE\nESTERNO",larghezza/4-84,altezza/5*3);
+  text("AUTOMAZIONE",larghezza/4*3-84,altezza/5*3);
+  if(clicked_automazione==true) text("ON",larghezza/4*3+10,altezza/5*3+40);
+  else text("OFF",larghezza/4*3+10,altezza/5*3+40);
   textSize(25);
   text(" INDIETRO",larghezza/2-65,altezza-20);
 }
@@ -215,6 +225,7 @@ void mousePressed(){
   Button portagarageapertura = new Button(0,0);
   Button indietro = new Button(0,height-(height/25));
   Button luciesterno = new Button(0,0);
+  Button automazione = new Button(larghezza/2+1,0);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -225,6 +236,7 @@ void mousePressed(){
   indietro.clicked_indietro(mouseX,mouseY);
   portagarageapertura.clicked_porta_garage_apertura(mouseX,mouseY);
   luciesterno.clicked_luci_esterno(mouseX,mouseY);
+  automazione.clicked_automazione(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -314,7 +326,7 @@ public class Button {
       }
     }
   }
-    public void clicked_luce_salone(int mx, int my){
+  public void clicked_luce_salone(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_salone=!clicked_luce_salone;
       a="ciao6";
@@ -353,7 +365,7 @@ public class Button {
       }
     }
   }
-    public void clicked_luce_garage(int mx, int my){
+  public void clicked_luce_garage(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1-(altezza/25)+y && clicked_luce_interno==true) {
       clicked_luce_garage=!clicked_luce_garage;
       a="ciao7";
@@ -392,15 +404,15 @@ public class Button {
       }
     }
   }
-    public void clicked_porta_garage_apertura(int mx, int my){
+  public void clicked_porta_garage_apertura(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_porta_garage==true && tastogarage==true) {
       clicked_porta_garage_apertura=!clicked_porta_garage_apertura;
       a="ciao9";
       println(a);
     }
   }
-    public void clicked_luci_esterno(int mx, int my){
-    if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
+  public void clicked_luci_esterno(int mx, int my){
+    if(mx>x && mx<x+larghezza/2-1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
       clicked_luci_esterno=!clicked_luci_esterno;
       a="ciao10";
       println(a);
@@ -408,7 +420,15 @@ public class Button {
       else port.write(10);
     }
   }
-    public void clicked_indietro(int mx, int my){
+  public void clicked_automazione(int mx, int my){
+    if(mx>x && mx<x+larghezza/2-1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
+      clicked_automazione=!clicked_automazione;
+      a="ciao11";
+      println(a);
+      port.write(15);
+    }
+  }
+  public void clicked_indietro(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h2+y && (clicked_luce_interno==true || clicked_porta_garage==true || clicked_luce_esterno==true)) {
       if(clicked_luce_interno==true) clicked_luce_interno=false;
       if(clicked_porta_garage==true) clicked_porta_garage=false;
