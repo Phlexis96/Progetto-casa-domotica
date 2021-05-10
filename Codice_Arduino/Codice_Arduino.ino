@@ -4,8 +4,9 @@
  *  GiHub Edition
  */
 int luci_interni=0; // 8casi.
-
 int menu=0;
+bool checkmenu=true;
+int tastoindietro=1;
 void setup() {
  Serial.begin(9600);
  pinMode(2, OUTPUT); //casa primo bit 001.
@@ -14,26 +15,8 @@ void setup() {
 }
 
 void Fluci_interni(){
-  
-}
-void loop() {
-  /*switch(menu){
-     case 1:{ //menu luci interne
-        Fluci_interni(); //controllo delle luci interne.
-     }
-     case 2:{ //menu garage
-        
-     }
-     case 3:{ //
-        
-     }
-     case 4:{ //
-        
-     }
-   }*/
-  if (Serial.available()){
-    luci_interni=0+Serial.read();
-  }
+  if(Serial.available())luci_interni=Serial.read();
+  if(luci_interni==0) checkmenu=true;
   if(luci_interni==1){
     digitalWrite(2, LOW);
     digitalWrite(3, LOW);
@@ -73,5 +56,18 @@ void loop() {
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
+  }
+}
+void loop() {
+  if (Serial.available() && checkmenu==true){
+    menu=Serial.read();
+  }
+  if(menu==11){
+    Fluci_interni();
+    checkmenu=false;
+  }
+  tastoindietro=Serial.read();
+    if(tastoindietro==0 && checkmenu==false){
+    checkmenu=true;
   }
 }

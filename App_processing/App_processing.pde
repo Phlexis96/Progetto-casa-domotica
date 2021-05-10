@@ -20,6 +20,7 @@ String binario="000";
 int casa_ino=0;
 int corridoio_ino=0;
 int garage_ino=0;
+String a;
 Serial port;
 void setup(){
   fullScreen();
@@ -183,17 +184,22 @@ void luciesterno(){
 
 
 void draw(){
-  int larghezza=width;
+  if(a=="ciao") port.write(11);
+  else if(a=="ciao8") port.write(0);
   primavolta=true;
   if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
   else if(clicked_luce_interno==true){
     tastiluci=true;
     luceinterno();
    }
+  if(a=="ciao") port.write(11);
+  else if(a=="ciao8") port.write(0);
   else if(clicked_porta_garage==true){
     tastogarage=true;
     portagarage();
   }
+  if(a=="ciao") port.write(11);
+  else if(a=="ciao8") port.write(0);
   else if(clicked_luce_esterno==true){
     tastoluciesterne=true;
     luciesterno();
@@ -246,31 +252,37 @@ public class Button {
   public void clicked_luce_interno(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_interno=!clicked_luce_interno;
-      println("ciao");
+      a="ciao";
+      port.write(11);
+      print(a);
     }
   }
   public void clicked_porta_garage(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_porta_garage=!clicked_porta_garage;
-      println("ciao2");
+      a="ciao2";
+      print(a);
     }
   }
   public void clicked_luce_esterno(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_esterno=!clicked_luce_esterno;
-      println("ciao3");
+      a="ciao3";
+      print(a);
     }
   }
   public void clicked_cancello(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_cancello=!clicked_cancello;
-      println("ciao4");
+      a="ciao4";
+      print(a);
     }
   }
   public void clicked_luce_cucina(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_cucina=!clicked_luce_cucina;
-      println("ciao5");
+      a="ciao5";
+      print(a);
       if(casa_ino==0){
         casa_ino=1;
       }
@@ -308,7 +320,8 @@ public class Button {
     public void clicked_luce_salone(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_salone=!clicked_luce_salone;
-      println("ciao6");
+      a="ciao6";
+      print(a);
       if(corridoio_ino==0){
         corridoio_ino=1;
       }
@@ -346,7 +359,8 @@ public class Button {
     public void clicked_luce_garage(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1-(altezza/25)+y && clicked_luce_interno==true) {
       clicked_luce_garage=!clicked_luce_garage;
-      println("ciao7");
+      a="ciao7";
+      print(a);
       if(garage_ino==0){
         garage_ino=1;
       }
@@ -384,13 +398,15 @@ public class Button {
     public void clicked_porta_garage_apertura(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_porta_garage==true && tastogarage==true) {
       clicked_porta_garage_apertura=!clicked_porta_garage_apertura;
-      println("ciao9");
+      a="ciao9";
+      print(a);
     }
   }
     public void clicked_luci_esterno(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
       clicked_luci_esterno=!clicked_luci_esterno;
-      println("ciao9");
+      a="ciao10";
+      print(a);
     }
   }
     public void clicked_indietro(int mx, int my){
@@ -401,7 +417,9 @@ public class Button {
       tastoluciesterne=false;
       tastiluci=false;
       tastogarage=false;
-      println("ciao8");
+      a="ciao8";
+      print(a);
+      port.write(0);
     }
   }
 }
