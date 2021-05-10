@@ -3,17 +3,27 @@
  *  DomoHouse 0.80.2b 12V 
  *  GiHub Edition
  */
-int luci_interni=0; // 8casi.
-int menu=0;
+int luci_interni=0 ; // 8casi.
+int menu=0,luci_esterni=0 ;
 bool checkmenu=true;
 int tastoindietro=1;
 void setup() {
  Serial.begin(115200);
- pinMode(2, OUTPUT); //casa primo bit 001.
+ pinMode(2,OUTPUT); //casa primo bit 001.
  pinMode(3,OUTPUT); //corridoio secondo bit 010.
  pinMode(4,OUTPUT); //garage terzo bit 100.
+ pinMode(5,OUTPUT); //luci esterne
+ //pinMode(A0,OUTPUT);// Fotoresistenza
 }
-
+void Fluci_esterni(){
+  if(Serial.available())luci_esterni=Serial.read();
+    if(luci_esterni==9){
+      digitalWrite(5,HIGH);
+    }
+    if(luci_esterni==10){
+      digitalWrite(5,LOW);
+    }
+}
 void Fluci_interni(){
   if(Serial.available())luci_interni=Serial.read();
   if(luci_interni==0) checkmenu=true;
@@ -62,8 +72,12 @@ void loop() {
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
   }
-  if(menu==11){
-    Fluci_interni();
+  if(menu==11){        //Menu delle luci interne
+    Fluci_interni(); //Funzione che controlla le luci interne
+    checkmenu=false;
+  }
+  if(menu==13){ //menu luci esterne
+    Fluci_esterni();
     checkmenu=false;
   }
 }
