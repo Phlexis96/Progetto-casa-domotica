@@ -1,0 +1,8 @@
+Progetto Casa domotica:
+Pin Analogici :
+Motorino (per il garage)
+Motorino (per il cancello)
+Sensore infrarossi (per il garage)
+Fotoresistenza (per le luci esterne)
+Bluetooth (per l'app android)
+Sensore Ultrasuoni (per l'entrata?)
