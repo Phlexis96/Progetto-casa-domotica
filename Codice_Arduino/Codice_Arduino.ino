@@ -1,6 +1,7 @@
 /*  I.T.T Piersanit Mattarella VD
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
  *  DomoHouse 0.80.2b 12V 
+ *  GiHub Edition
  */
 int luci_interni=0; // 8casi.
 
