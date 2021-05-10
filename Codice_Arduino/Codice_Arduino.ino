@@ -4,16 +4,17 @@
  *  GiHub Edition
  */
 int luci_interni=0 ; // 8casi.
-int menu=0,luci_esterni=0 ;
-bool checkmenu=true;
+int menu=0,luci_esterni=0,scelta_automazione=0 ;
+bool checkmenu=true,automazione=true;
 int tastoindietro=1;
+int Lux=0;
 void setup() {
  Serial.begin(115200);
  pinMode(2,OUTPUT); //casa primo bit 001.
  pinMode(3,OUTPUT); //corridoio secondo bit 010.
  pinMode(4,OUTPUT); //garage terzo bit 100.
  pinMode(5,OUTPUT); //luci esterne
- //pinMode(A0,OUTPUT);// Fotoresistenza
+pinMode(A0,OUTPUT);// Fotoresistenza
 }
 void Fluci_esterni(){
   if(Serial.available())luci_esterni=Serial.read();
@@ -70,6 +71,13 @@ void Fluci_interni(){
   else if(luci_interni==100) checkmenu=true;
 }
 void loop() {
+   //Luci esterne automatiche
+  Lux=analogRead(A0);
+  scelta_automazione=Serial.read();
+  if(scelta_automazione==15){
+    if(Lux<30 && automazione==true) digitalWrite(5,HIGH);
+    else if(Lux>30 && automazione==true)digitalWrite(5,LOW);
+  }
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
   }
