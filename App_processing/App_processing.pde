@@ -1,3 +1,6 @@
+/*Progetto Casa Domotica
+  by Maggio Antonino, Pulizzi Josè e Lombardo Marco
+*/
 import processing.serial.*;
 int larghezza=width, altezza=height;
 boolean primavolta=false;
