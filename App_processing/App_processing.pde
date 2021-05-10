@@ -186,20 +186,17 @@ void luciesterno(){
 void draw(){
   if(a=="ciao") port.write(11);
   else if(a=="ciao8") port.write(0);
+  else if(a=="ciao3") port.write(13);
   primavolta=true;
   if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
   else if(clicked_luce_interno==true){
     tastiluci=true;
     luceinterno();
    }
-  if(a=="ciao") port.write(11);
-  else if(a=="ciao8") port.write(0);
   else if(clicked_porta_garage==true){
     tastogarage=true;
     portagarage();
   }
-  if(a=="ciao") port.write(11);
-  else if(a=="ciao8") port.write(0);
   else if(clicked_luce_esterno==true){
     tastoluciesterne=true;
     luciesterno();
