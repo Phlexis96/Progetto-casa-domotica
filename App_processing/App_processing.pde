@@ -247,7 +247,6 @@ public class Button {
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_interno=!clicked_luce_interno;
       println("ciao");
-      port.write(1);
     }
   }
   public void clicked_porta_garage(int mx, int my){
