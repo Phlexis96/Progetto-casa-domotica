@@ -24,7 +24,7 @@ String a;
 Serial port;
 void setup(){
   fullScreen();
-  port = new Serial(this, Serial.list()[0], 9600); //Variabile luce
+  port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
   background(0);
 }
 
@@ -253,36 +253,35 @@ public class Button {
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_interno=!clicked_luce_interno;
       a="ciao";
-      port.write(11);
-      print(a);
+      println(a);
     }
   }
   public void clicked_porta_garage(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_porta_garage=!clicked_porta_garage;
       a="ciao2";
-      print(a);
+      println(a);
     }
   }
   public void clicked_luce_esterno(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_esterno=!clicked_luce_esterno;
       a="ciao3";
-      print(a);
+      println(a);
     }
   }
   public void clicked_cancello(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_cancello=!clicked_cancello;
       a="ciao4";
-      print(a);
+      println(a);
     }
   }
   public void clicked_luce_cucina(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_cucina=!clicked_luce_cucina;
       a="ciao5";
-      print(a);
+      println(a);
       if(casa_ino==0){
         casa_ino=1;
       }
@@ -321,7 +320,7 @@ public class Button {
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_salone=!clicked_luce_salone;
       a="ciao6";
-      print(a);
+      println(a);
       if(corridoio_ino==0){
         corridoio_ino=1;
       }
@@ -360,7 +359,7 @@ public class Button {
     if(mx>x && mx<x+w1 && my>y && my<h1-(altezza/25)+y && clicked_luce_interno==true) {
       clicked_luce_garage=!clicked_luce_garage;
       a="ciao7";
-      print(a);
+      println(a);
       if(garage_ino==0){
         garage_ino=1;
       }
@@ -399,14 +398,14 @@ public class Button {
     if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_porta_garage==true && tastogarage==true) {
       clicked_porta_garage_apertura=!clicked_porta_garage_apertura;
       a="ciao9";
-      print(a);
+      println(a);
     }
   }
     public void clicked_luci_esterno(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
       clicked_luci_esterno=!clicked_luci_esterno;
       a="ciao10";
-      print(a);
+      println(a);
     }
   }
     public void clicked_indietro(int mx, int my){
@@ -418,8 +417,7 @@ public class Button {
       tastiluci=false;
       tastogarage=false;
       a="ciao8";
-      print(a);
-      port.write(0);
+      println(a);
     }
   }
 }

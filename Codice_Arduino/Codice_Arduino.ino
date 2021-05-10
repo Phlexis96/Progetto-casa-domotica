@@ -8,7 +8,7 @@ int menu=0;
 bool checkmenu=true;
 int tastoindietro=1;
 void setup() {
- Serial.begin(9600);
+ Serial.begin(115200);
  pinMode(2, OUTPUT); //casa primo bit 001.
  pinMode(3,OUTPUT); //corridoio secondo bit 010.
  pinMode(4,OUTPUT); //garage terzo bit 100.
@@ -65,9 +65,5 @@ void loop() {
   if(menu==11){
     Fluci_interni();
     checkmenu=false;
-  }
-  tastoindietro=Serial.read();
-    if(tastoindietro==0 && checkmenu==false){
-    checkmenu=true;
   }
 }
