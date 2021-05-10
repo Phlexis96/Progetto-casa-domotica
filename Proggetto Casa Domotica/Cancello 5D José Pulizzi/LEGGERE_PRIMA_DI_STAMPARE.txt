@@ -1,0 +1,10 @@
+La cartella contiene il cancello da stampare non sappiamo se le dimesioni bastino per stampare il cancello intero
+quindi abbiamo fatto due file che contengono la prima e seconda parte del cancello.
+
+
+se non é troppo grande stampare solo "Cancello Intero"
+se é troppo grande stampare quindi:
+"cancello (parte1)" e "Cancello (parte 2)"
+
+
+inoltre stampare due volte "Ruota femmina" e "Ruota Maschio"

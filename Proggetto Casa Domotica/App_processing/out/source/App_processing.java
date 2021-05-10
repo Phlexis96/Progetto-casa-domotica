@@ -1,34 +1,42 @@
-/*Progetto Casa Domotica
-  by Maggio Antonino, Pulizzi Josè e Lombardo Marco
-*/
-import processing.serial.*;
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class App_processing extends PApplet {
+
 int larghezza=width, altezza=height;
 boolean primavolta=false;
-boolean clicked_luce_interno=false;  //luce interno menù principale
-boolean clicked_porta_garage=false;  //porta garage menù principale
-boolean clicked_luce_esterno=false;  //luce esterno menù principale
-boolean clicked_cancello=false;  //tasto cancello menù principale
-boolean clicked_luce_cucina=false;  //luce cucina menù luci
-boolean clicked_luce_salone=false;  //luce salone menù luci
-boolean clicked_luce_garage=false;  //luce garage menù luci
-boolean clicked_porta_garage_apertura=false;  //porta garage menù garage
-boolean clicked_luci_esterno=false;  //luci esterno menù luci esterno
+boolean clicked_luce_interno=false;
+boolean clicked_porta_garage=false;
+boolean clicked_luce_esterno=false;
+boolean clicked_cancello=false;
+boolean clicked_luce_cucina=false;
+boolean clicked_luce_salone=false;
+boolean clicked_luce_garage=false;
+boolean clicked_porta_garage_apertura=false;
+boolean clicked_luci_esterno=false;
 boolean tastiluci=false;
 boolean tastogarage=false;
 boolean tastoluciesterne=false;
-String binario="000";
-int casa_ino=0;
-int corridoio_ino=0;
-int garage_ino=0;
-Serial port;
-void setup(){
-  fullScreen();
-  port = new Serial(this, Serial.list()[0], 9600); //Variabile luce
+
+
+public void setup(){
+  
   background(0);
 }
 
 //Funzione del menù principale
-void tasti(){
+public void tasti(){
   larghezza=width;
   altezza=height;
   stroke(0);
@@ -91,7 +99,7 @@ void tasti(){
 }
 
 //Funzione per il menù luci interne
-void luceinterno(){
+public void luceinterno(){
   int larghezza=width, altezza=height;
   strokeWeight(2);
   if(clicked_luce_cucina==true) fill(255,180,0);
@@ -117,24 +125,24 @@ void luceinterno(){
   rect(larghezza/2-32,altezza/5+10,44,5,10);
   text("  LUCE\nCUCINA",larghezza/2-83,altezza/5+60);
   //seconda lampadina
-  ellipse(larghezza/2-10,altezza/5*2.7-100,100,100);
-  rect(larghezza/2-35,altezza/5*2.7-70,50,55,10);
-  rect(larghezza/2-32,altezza/5*2.7-10,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7+10,44,5,10);
-  text("  LUCE\nSALONE",larghezza/2-83,altezza/5*2.7+60);
+  ellipse(larghezza/2-10,altezza/5*2.7f-100,100,100);
+  rect(larghezza/2-35,altezza/5*2.7f-70,50,55,10);
+  rect(larghezza/2-32,altezza/5*2.7f-10,44,5,10);
+  rect(larghezza/2-32,altezza/5*2.7f,44,5,10);
+  rect(larghezza/2-32,altezza/5*2.7f+10,44,5,10);
+  text("  LUCE\nSALONE",larghezza/2-83,altezza/5*2.7f+60);
   //terza lampadina
-  ellipse(larghezza/2-10,altezza/5*4.3-100,100,100);
-  rect(larghezza/2-35,altezza/5*4.3-70,50,55,10);
-  rect(larghezza/2-32,altezza/5*4.3-10,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3+10,44,5,10);
-  text("   LUCE\n GARAGE",larghezza/2-95,altezza/5*4.3+60);
+  ellipse(larghezza/2-10,altezza/5*4.3f-100,100,100);
+  rect(larghezza/2-35,altezza/5*4.3f-70,50,55,10);
+  rect(larghezza/2-32,altezza/5*4.3f-10,44,5,10);
+  rect(larghezza/2-32,altezza/5*4.3f,44,5,10);
+  rect(larghezza/2-32,altezza/5*4.3f+10,44,5,10);
+  text("   LUCE\n GARAGE",larghezza/2-95,altezza/5*4.3f+60);
   strokeWeight(1);
 }
 
 
-void portagarage(){
+public void portagarage(){
   int larghezza=width, altezza=height;
   fill(0,100,255);  //blu
   rect(0,0,larghezza,altezza);
@@ -163,7 +171,7 @@ void portagarage(){
 }
 
 
-void luciesterno(){
+public void luciesterno(){
   int larghezza=width, altezza=height;
   if(clicked_luci_esterno==true) fill(0,255,50);
   else fill(0,120,10);
@@ -182,7 +190,7 @@ void luciesterno(){
 }
 
 
-void draw(){
+public void draw(){
   int larghezza=width;
   primavolta=true;
   if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
@@ -201,17 +209,17 @@ void draw(){
 }
 
 
-void mousePressed(){
+public void mousePressed(){
   Button luceinterno = new Button(0,0);
-  Button portagarage = new Button(width/2+1,0);
-  Button luceesterno = new Button(0,height/2+1);
-  Button cancello = new Button(width/2+1,height/2+1);
-  Button lucecucina = new Button(0,0);
-  Button lucesalone = new Button(0,height/3);
-  Button lucegarage = new Button(0,height/3*2);
-  Button portagarageapertura = new Button(0,0);
-  Button indietro = new Button(0,height-(height/25));
-  Button luciesterno = new Button(0,0);
+Button portagarage = new Button(width/2+1,0);
+Button luceesterno = new Button(0,height/2+1);
+Button cancello = new Button(width/2+1,height/2+1);
+Button lucecucina = new Button(0,0);
+Button lucesalone = new Button(0,height/3);
+Button lucegarage = new Button(0,height/3*2);
+Button portagarageapertura = new Button(0,0);
+Button indietro = new Button(0,height-(height/25));
+Button luciesterno = new Button(0,0);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -247,7 +255,6 @@ public class Button {
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_luce_interno=!clicked_luce_interno;
       println("ciao");
-      port.write(1);
     }
   }
   public void clicked_porta_garage(int mx, int my){
@@ -272,114 +279,18 @@ public class Button {
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_cucina=!clicked_luce_cucina;
       println("ciao5");
-      if(casa_ino==0){
-        casa_ino=1;
-      }
-      else if(casa_ino==1){
-        casa_ino=0;
-      }
-      binario=casa_ino+""+corridoio_ino+""+garage_ino;
-      println(casa_ino+""+corridoio_ino+""+garage_ino);
-      if(binario.equals("000")){
-        port.write(1);
-        }
-      if(binario.equals("001")){
-        port.write(2);
-      }
-      if(binario.equals("010")){
-        port.write(3);
-      } 
-      if(binario.equals("011")){
-        port.write(4);
-      }
-      if(binario.equals("100")){
-        port.write(5);
-      }
-      if(binario.equals("101")){
-        port.write(6);
-      }
-      if(binario.equals("110")){
-        port.write(7);
-      } 
-      if(binario.equals("111")){
-        port.write(8);
-      }
     }
   }
     public void clicked_luce_salone(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1+y && clicked_luce_interno==true && tastiluci==true) {
       clicked_luce_salone=!clicked_luce_salone;
       println("ciao6");
-      if(corridoio_ino==0){
-        corridoio_ino=1;
-      }
-      else if(corridoio_ino==1){
-        corridoio_ino=0;
-      }
-      binario=casa_ino+""+corridoio_ino+""+garage_ino;
-      println(casa_ino+""+corridoio_ino+""+garage_ino);
-      if(binario.equals("000")){
-        port.write(1);
-        }
-      if(binario.equals("001")){
-        port.write(2);
-      }
-      if(binario.equals("010")){
-        port.write(3);
-      } 
-      if(binario.equals("011")){
-        port.write(4);
-      }
-      if(binario.equals("100")){
-        port.write(5);
-      }
-      if(binario.equals("101")){
-        port.write(6);
-      }
-      if(binario.equals("110")){
-        port.write(7);
-      } 
-      if(binario.equals("111")){
-        port.write(8);
-      }
     }
   }
     public void clicked_luce_garage(int mx, int my){
     if(mx>x && mx<x+w1 && my>y && my<h1-(altezza/25)+y && clicked_luce_interno==true) {
       clicked_luce_garage=!clicked_luce_garage;
       println("ciao7");
-      if(garage_ino==0){
-        garage_ino=1;
-      }
-      else if(garage_ino==1){
-        garage_ino=0;
-      }
-      binario=casa_ino+""+corridoio_ino+""+garage_ino;
-      println(casa_ino+""+corridoio_ino+""+garage_ino);
-      if(binario.equals("000")){
-        port.write(1);
-        }
-      if(binario.equals("001")){
-        port.write(2);
-      }
-      if(binario.equals("010")){
-        port.write(3);
-      } 
-      if(binario.equals("011")){
-        port.write(4);
-      }
-      if(binario.equals("100")){
-        port.write(5);
-      }
-      if(binario.equals("101")){
-        port.write(6);
-      }
-      if(binario.equals("110")){
-        port.write(7);
-      } 
-      if(binario.equals("111")){
-        port.write(8);
-      }
     }
   }
     public void clicked_porta_garage_apertura(int mx, int my){
@@ -403,6 +314,16 @@ public class Button {
       tastiluci=false;
       tastogarage=false;
       println("ciao8");
+    }
+  }
+}
+  public void settings() {  fullScreen(); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "App_processing" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
     }
   }
 }

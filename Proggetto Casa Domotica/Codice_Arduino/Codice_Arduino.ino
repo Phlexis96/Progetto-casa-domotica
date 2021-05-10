@@ -1,7 +1,6 @@
 /*  I.T.T Piersanit Mattarella VD
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
  *  DomoHouse 0.80.2b 12V 
- *  GiHub Edition
  */
 int luci_interni=0; // 8casi.
 
@@ -14,7 +13,24 @@ void setup() {
 }
 
 void Fluci_interni(){
-   if (Serial.available()){
+  
+}
+void loop() {
+  /*switch(menu){
+     case 1:{ //menu luci interne
+        Fluci_interni(); //controllo delle luci interne.
+     }
+     case 2:{ //menu garage
+        
+     }
+     case 3:{ //
+        
+     }
+     case 4:{ //
+        
+     }
+   }*/
+  if (Serial.available()){
     luci_interni=0+Serial.read();
   }
   if(luci_interni==1){
@@ -57,15 +73,4 @@ void Fluci_interni(){
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
   }
-}
-int schedamenu=0;
-void loop() {
-   if (Serial.available()){
-    shedamenu=0+Serial.read();
-  }
-  if(schedamenu==1){
-    Fluci_interni();
-  }
- 
- 
 }
