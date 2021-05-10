@@ -60,8 +60,8 @@ void Fluci_interni(){
 }
 int schedamenu=0;
 void loop() {
-  if (Serial.available() && schedamenu!=1){
-    schedamenu=0+Serial.read();
+   if (Serial.available()){
+    shedamenu=0+Serial.read();
   }
   if(schedamenu==1){
     Fluci_interni();
