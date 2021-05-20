@@ -1,5 +1,5 @@
 /*Progetto Casa Domotica
-  by Maggio Antonino, Pulizzi Josè e Lombardo Marco
+  by Maggio Antonino, Pulizzi Josè e Lombardo Marcoa
 */
 import processing.serial.*;
 int larghezza=width, altezza=height;
@@ -192,24 +192,30 @@ void luciesterno(){
   text(" INDIETRO",larghezza/2-65,altezza-20);
 }
 
+void controllo(){
+  if(a=="ciao") port.write(11);
+  else if(a=="ciao8") port.write(111);
+  else if(a=="ciao3") port.write(13);
+}
 
 void draw(){
-  if(a=="ciao") port.write(11);
-  else if(a=="ciao8") port.write(0);
-  else if(a=="ciao3") port.write(13);
+  controllo();
   primavolta=true;
   if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
   else if(clicked_luce_interno==true){
     tastiluci=true;
     luceinterno();
+    controllo();
    }
   else if(clicked_porta_garage==true){
     tastogarage=true;
     portagarage();
+    controllo();
   }
   else if(clicked_luce_esterno==true){
     tastoluciesterne=true;
     luciesterno();
+    controllo();
   }
 }
 
@@ -277,7 +283,6 @@ public class Button {
       clicked_luce_esterno=!clicked_luce_esterno;
       a="ciao3";
       println(a);
-      port.write(13);
     }
   }
   public void clicked_cancello(int mx, int my){
@@ -438,7 +443,6 @@ public class Button {
       tastogarage=false;
       a="ciao8";
       println(a);
-      port.write(100);
     }
   }
 }
