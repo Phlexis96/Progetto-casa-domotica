@@ -1,5 +1,5 @@
 /*Progetto Casa Domotica
-  by Maggio Antonino, Pulizzi Josè e Lombardo Marcoa
+  by Maggio Antonino, Pulizzi Josè e Lombardo Marco
 */
 import processing.serial.*;
 int larghezza=width, altezza=height;
@@ -24,7 +24,8 @@ int garage_ino=0;
 String a;
 Serial port;
 void setup(){
-  fullScreen();
+  //fullScreen();
+  size(1600,900);
   port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
   background(0);
 }
@@ -430,7 +431,10 @@ public class Button {
       clicked_automazione=!clicked_automazione;
       a="ciao11";
       println(a);
-      port.write(15);
+      if(clicked_automazione==true) {
+        port.write(16);
+    }
+      else if(clicked_automazione==false) port.write(15);
     }
   }
   public void clicked_indietro(int mx, int my){
