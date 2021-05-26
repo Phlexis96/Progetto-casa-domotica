@@ -3,26 +3,34 @@
  *  DomoHouse 0.80.2b 12V 
  *  GiHub Edition
  */
+#define VIN 5
+#define R 200
 int luci_interni=0 ; // 8casi.
 int menu=0,luci_esterni=0,scelta_automazione=0 ;
-bool checkmenu=true,automazione=true;
+bool checkmenu=true,automazione=false;
 int tastoindietro=1;
-int Lux=0;
+const int sensorPin = A0; // Pin connected to sensor
+int sensorVal; // Analog value from the sensor
+int lux; //Lux value
 void setup() {
  Serial.begin(115200);
  pinMode(2,OUTPUT); //casa primo bit 001.
  pinMode(3,OUTPUT); //corridoio secondo bit 010.
  pinMode(4,OUTPUT); //garage terzo bit 100.
  pinMode(5,OUTPUT); //luci esterne
-pinMode(A0,OUTPUT);// Fotoresistenza
+ pinMode(A0,OUTPUT);// Fotoresistenza
 }
 void Fluci_esterni(){
-  if(Serial.available());
+  if(Serial.available())
     scelta_automazione=Serial.read();
-   if(scelta_automazione==15){
-     if(Lux<30 && automazione==true) digitalWrite(5,HIGH);
-     else if(Lux>30 && automazione==true)digitalWrite(5,LOW);
-  }else{
+  if(scelta_automazione==16) automazione=true;
+  else if(scelta_automazione==15) automazione=false;
+  if(automazione==true){
+    if(lux<50) digitalWrite(5,HIGH);
+    if(Serial.available())
+    scelta_automazione=Serial.read();
+    else if(lux>=50)digitalWrite(5,LOW);
+  }else if(automazione==false){
    if(Serial.available()) luci_esterni=Serial.read(); 
     if(luci_esterni==9){
       digitalWrite(5,HIGH);
@@ -31,7 +39,7 @@ void Fluci_esterni(){
       digitalWrite(5,LOW);
      }
   } 
-  if(luci_esterni==111) checkmenu=true;
+  if(scelta_automazione==111) checkmenu=true;
 }
 void Fluci_interni(){
   if(Serial.available())luci_interni=Serial.read();
@@ -77,9 +85,16 @@ void Fluci_interni(){
   }
   else if(luci_interni==111) checkmenu=true;
 }
+
+
 void loop() {
    //Luci esterne automatiche
-       Lux=analogRead(A0);
+  sensorVal = analogRead(sensorPin);
+  lux=sensorRawToPhys(sensorVal);
+  if(automazione==true){
+    if(lux<50) digitalWrite(5,HIGH);
+    else if(lux>=50)digitalWrite(5,LOW);
+  }
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
   }
@@ -91,4 +106,13 @@ void loop() {
     checkmenu=false;
     Fluci_esterni();
   }
+}
+
+
+int sensorRawToPhys(int raw){
+  // Conversion rule
+  float Vout = float(raw) * (VIN / float(1023));// Conversion analog to voltage
+  float RLDR = (R * (VIN - Vout))/Vout; // Conversion voltage to resistance
+  int phys=500/(RLDR/1000); // Conversion resitance to lumen
+  return phys;
 }
