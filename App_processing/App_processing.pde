@@ -14,9 +14,11 @@ boolean clicked_luce_garage=false;  //luce garage menù luci
 boolean clicked_porta_garage_apertura=false;  //porta garage menù garage
 boolean clicked_luci_esterno=false;  //luci esterno menù luci esterno
 boolean clicked_automazione=false;  //automazione luci esterno
+boolean clicked_apertura_cancello=false; //tasto per aprire il cancello
 boolean tastiluci=false;
 boolean tastogarage=false;
 boolean tastoluciesterne=false;
+boolean tastocancello=false;
 String binario="000";
 int casa_ino=0;
 int corridoio_ino=0;
@@ -24,8 +26,8 @@ int garage_ino=0;
 String a;
 Serial port;
 void setup(){
-  //fullScreen();
-  size(1600,900);
+  fullScreen();
+  //size(600,600);
   port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
   background(0);
 }
@@ -199,6 +201,16 @@ void controllo(){
   else if(a=="ciao3") port.write(13);
 }
 
+void cancello(){
+  fill(255,0,255);
+  rect(0,0,larghezza,altezza-altezza/25);
+  fill(130);
+  rect(0,altezza-(altezza/25),larghezza,altezza/25);
+  fill(0);
+  textSize(25);
+  text(" INDIETRO",larghezza/2-65,altezza-20);
+}
+
 void draw(){
   controllo();
   primavolta=true;
@@ -218,6 +230,11 @@ void draw(){
     luciesterno();
     controllo();
   }
+  else if(clicked_cancello==true){
+    tastocancello=true;
+    cancello();
+    controllo();
+  }
 }
 
 
@@ -233,6 +250,7 @@ void mousePressed(){
   Button indietro = new Button(0,height-(height/25));
   Button luciesterno = new Button(0,0);
   Button automazione = new Button(larghezza/2+1,0);
+  Button apertura_cancello = new Button(0,0);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -244,6 +262,7 @@ void mousePressed(){
   portagarageapertura.clicked_porta_garage_apertura(mouseX,mouseY);
   luciesterno.clicked_luci_esterno(mouseX,mouseY);
   automazione.clicked_automazione(mouseX,mouseY);
+  apertura_cancello.clicked_apertura_cancello(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -290,6 +309,7 @@ public class Button {
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
       clicked_cancello=!clicked_cancello;
       a="ciao4";
+      port.write(14);
       println(a);
     }
   }
@@ -437,14 +457,29 @@ public class Button {
       else if(clicked_automazione==false) port.write(15);
     }
   }
+  public void clicked_apertura_cancello(int mx, int my){
+    if(mx>x && mx<x+w1 && my>y && my<h3+y && clicked_cancello==true){
+      clicked_apertura_cancello=!clicked_apertura_cancello;
+      a="ciao12";
+      println(a);
+      if(clicked_apertura_cancello==true){
+        port.write(17);
+      }
+      else{
+        port.write(18);
+      }
+    }
+  }
   public void clicked_indietro(int mx, int my){
-    if(mx>x && mx<x+w1 && my>y && my<h2+y && (clicked_luce_interno==true || clicked_porta_garage==true || clicked_luce_esterno==true)) {
+    if(mx>x && mx<x+w1 && my>y && my<h2+y && (clicked_luce_interno==true || clicked_porta_garage==true || clicked_luce_esterno==true || clicked_cancello==true)) {
       if(clicked_luce_interno==true) clicked_luce_interno=false;
       if(clicked_porta_garage==true) clicked_porta_garage=false;
       if(clicked_luce_esterno==true) clicked_luce_esterno=false;
+      if(clicked_cancello==true) clicked_cancello=false;
       tastoluciesterne=false;
       tastiluci=false;
       tastogarage=false;
+      tastocancello=false;
       a="ciao8";
       println(a);
     }
