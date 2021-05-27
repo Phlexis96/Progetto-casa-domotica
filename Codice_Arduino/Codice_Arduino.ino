@@ -21,24 +21,24 @@ void setup() {
  pinMode(A0,OUTPUT);// Fotoresistenza
 }
 void Fluci_esterni(){
-  if(Serial.available())
-    scelta_automazione=Serial.read();
-  if(scelta_automazione==16) automazione=true;
-  else if(scelta_automazione==15) automazione=false;
-  if(automazione==true){
-    if(lux<50) digitalWrite(5,HIGH);
-    if(Serial.available())
-    scelta_automazione=Serial.read();
-    else if(lux>=50)digitalWrite(5,LOW);
-  }else if(automazione==false){
-   if(Serial.available()) luci_esterni=Serial.read(); 
+  if(scelta_automazione==15){
+    automazione=false;
+    digitalWrite(5,LOW);
+  }
+  if(automazione==false){
+    if(Serial.available()) luci_esterni=Serial.read();
     if(luci_esterni==9){
       digitalWrite(5,HIGH);
-     }
+    }
     else if(luci_esterni==10){
       digitalWrite(5,LOW);
-     }
-  } 
+    }
+    if(luci_esterni==16) automazione=true;
+    if(luci_esterni==111) checkmenu=true;
+  }
+  if(Serial.available()) scelta_automazione=Serial.read();
+  if(scelta_automazione==16) automazione=true;
+  
   if(scelta_automazione==111) checkmenu=true;
 }
 void Fluci_interni(){
@@ -88,12 +88,12 @@ void Fluci_interni(){
 
 
 void loop() {
-   //Luci esterne automatiche
+  //Luci esterne automatiche
   sensorVal = analogRead(sensorPin);
   lux=sensorRawToPhys(sensorVal);
   if(automazione==true){
-    if(lux<50) digitalWrite(5,HIGH);
-    else if(lux>=50)digitalWrite(5,LOW);
+    if(lux<1) digitalWrite(5,HIGH);
+    else if(lux>=1)digitalWrite(5,LOW);
   }
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
