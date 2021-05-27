@@ -8,14 +8,14 @@
 #define R 200
 int luci_interni=0 ; // 8casi.
 int menu=0,luci_esterni=0,scelta_automazione=0 ;
-bool checkmenu=true,automazione=false;
+bool checkmenu=true,automazione=false,apertura_cancello=false;
 int tastoindietro=1;
 const int sensorPin = A0; // Pin connected to sensor
 int sensorVal; // Analog value from the sensor
 int lux; //Lux value
-int cancello;
+int cancello=0, excancello=0;
 Stepper myStepper(2048, 11, 9, 10, 8);
-float gradi = 1;
+float gradi = 0;
 void setup() {
  Serial.begin(115200);
  pinMode(2,OUTPUT); //casa primo bit 001.
@@ -92,24 +92,31 @@ void Fluci_interni(){
 }
 
 void Fcancello(){
-  gradi = map(gradi, 0, 360, 0, 2048);
-  if(Serial.available())cancello=Serial.read();
-  if(cancello==17) myStepper.step(gradi);
-  if(cancello==18) myStepper.step(-gradi);
+  //gradi = map(gradi, 0, 360, 0, 2048);
+  if(Serial.available())
+   cancello=Serial.read();
+  if(cancello==17) gradi=1;
+  else if(cancello==18) gradi=-1;
+  else if(cancello==19) gradi=0;
+  myStepper.step(gradi);
   if(cancello==111) checkmenu=true;
 }
 
 void loop() {
   //Luci esterne automatiche
-  sensorVal = analogRead(sensorPin);
-  lux=sensorRawToPhys(sensorVal);
   if(automazione==true){
     if(lux<1) digitalWrite(5,HIGH);
     else if(lux>=1)digitalWrite(5,LOW);
   }
+  sensorVal = analogRead(sensorPin);
+  lux=sensorRawToPhys(sensorVal);
   if (Serial.available() && checkmenu==true){
     menu=Serial.read();
-  }
+  } 
+  myStepper.step(gradi);
+  if(cancello==17) myStepper.step(1);
+    else if(cancello==18) myStepper.step(-1);
+
   if(menu==11){        //Menu delle luci interne
     checkmenu=false;
     Fluci_interni(); //Funzione che controlla le luci interne
@@ -119,6 +126,7 @@ void loop() {
     Fluci_esterni();
   }
   if(menu==14){
+
     checkmenu=false;
     Fcancello();
   }
