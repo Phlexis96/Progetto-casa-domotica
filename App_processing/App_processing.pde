@@ -19,6 +19,7 @@ boolean tastiluci=false;
 boolean tastogarage=false;
 boolean tastoluciesterne=false;
 boolean tastocancello=false;
+int pausacancello=1;
 String binario="000";
 int casa_ino=0;
 int corridoio_ino=0;
@@ -307,6 +308,7 @@ public class Button {
   }
   public void clicked_cancello(int mx, int my){
     if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+      delay(200);
       clicked_cancello=!clicked_cancello;
       a="ciao4";
       port.write(14);
@@ -462,11 +464,25 @@ public class Button {
       clicked_apertura_cancello=!clicked_apertura_cancello;
       a="ciao12";
       println(a);
-      if(clicked_apertura_cancello==true){
+      if(pausacancello==0){
         port.write(17);
+        pausacancello+=1;
+        println(17);
+      }
+      else if(pausacancello==1){
+        port.write(19);
+        pausacancello+=1;
+        println(19);
+      }
+      else if(pausacancello==2){
+        port.write(18);
+        pausacancello+=1;
+        println(18);
       }
       else{
-        port.write(18);
+        port.write(19);
+        println(19);
+        pausacancello=0;
       }
     }
   }
