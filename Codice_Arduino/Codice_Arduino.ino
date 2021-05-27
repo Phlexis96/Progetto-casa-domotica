@@ -3,6 +3,7 @@
  *  DomoHouse 0.80.2b 12V 
  *  GiHub Edition
  */
+#include <Stepper.h>
 #define VIN 5
 #define R 200
 int luci_interni=0 ; // 8casi.
@@ -12,6 +13,9 @@ int tastoindietro=1;
 const int sensorPin = A0; // Pin connected to sensor
 int sensorVal; // Analog value from the sensor
 int lux; //Lux value
+int cancello;
+Stepper myStepper(2048, 11, 9, 10, 8);
+float gradi = 1;
 void setup() {
  Serial.begin(115200);
  pinMode(2,OUTPUT); //casa primo bit 001.
@@ -19,6 +23,7 @@ void setup() {
  pinMode(4,OUTPUT); //garage terzo bit 100.
  pinMode(5,OUTPUT); //luci esterne
  pinMode(A0,OUTPUT);// Fotoresistenza
+ myStepper.setSpeed(10);
 }
 void Fluci_esterni(){
   if(scelta_automazione==15){
@@ -86,6 +91,13 @@ void Fluci_interni(){
   else if(luci_interni==111) checkmenu=true;
 }
 
+void Fcancello(){
+  gradi = map(gradi, 0, 360, 0, 2048);
+  if(Serial.available())cancello=Serial.read();
+  if(cancello==17) myStepper.step(gradi);
+  if(cancello==18) myStepper.step(-gradi);
+  if(cancello==111) checkmenu=true;
+}
 
 void loop() {
   //Luci esterne automatiche
@@ -105,6 +117,10 @@ void loop() {
   if(menu==13){ //menu luci esterne
     checkmenu=false;
     Fluci_esterni();
+  }
+  if(menu==14){
+    checkmenu=false;
+    Fcancello();
   }
 }
 
