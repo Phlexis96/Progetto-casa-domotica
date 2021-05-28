@@ -27,8 +27,8 @@ int garage_ino=0;
 String a;
 Serial port;
 void setup(){
-  fullScreen();
-  //size(600,600);
+  //fullScreen();
+  size(displayWidth,displayHeight);
   port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
   background(0);
 }
