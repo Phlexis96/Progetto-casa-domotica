@@ -13,7 +13,7 @@ int tastoindietro=1;
 const int sensorPin = A0; // Pin connected to sensor
 int sensorVal; // Analog value from the sensor
 int lux; //Lux value
-int cancello=0, excancello=0;
+int cancello=19, excancello=0;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
 void setup() {
@@ -93,11 +93,13 @@ void Fluci_interni(){
 
 void Fcancello(){
   //gradi = map(gradi, 0, 360, 0, 2048);
-  if(Serial.available())
-   cancello=Serial.read();
+  cancello=Serial.read();
   if(cancello==17) gradi=1;
   else if(cancello==18) gradi=-1;
-  else if(cancello==19) gradi=0;
+  else if(cancello==19){
+  gradi=0;
+  //movimento=false;
+  }
   myStepper.step(gradi);
   if(cancello==111) checkmenu=true;
 }
@@ -110,26 +112,22 @@ void loop() {
   }
   sensorVal = analogRead(sensorPin);
   lux=sensorRawToPhys(sensorVal);
-  if (Serial.available() && checkmenu==true){
+  if (checkmenu==true){
     menu=Serial.read();
   } 
-  myStepper.step(gradi);
-  if(cancello==17) myStepper.step(1);
-    else if(cancello==18) myStepper.step(-1);
-
   if(menu==11){        //Menu delle luci interne
     checkmenu=false;
     Fluci_interni(); //Funzione che controlla le luci interne
   }
   if(menu==13){ //menu luci esterne
     checkmenu=false;
-    Fluci_esterni();
+    Fluci_esterni(); //funzione menu luci esterne
   }
-  if(menu==14){
-
+  if(menu==14){ //menu cancello
     checkmenu=false;
-    Fcancello();
+    Fcancello(); //funzione menu cancello
   }
+  myStepper.step(gradi);
 }
 
 
