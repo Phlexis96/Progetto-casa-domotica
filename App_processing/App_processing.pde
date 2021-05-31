@@ -197,9 +197,9 @@ void luciesterno(){
 }
 
 void controllo(){
-  if(a=="ciao") port.write(11);
-  else if(a=="ciao8") port.write(111);
-  else if(a=="ciao3") port.write(13);
+  //if(a=="ciao") port.write(11);
+  if(a=="ciao8") port.write(111);
+  //else if(a=="ciao3") port.write(13);
 }
 
 void cancello(){
@@ -290,6 +290,7 @@ public class Button {
       clicked_luce_interno=!clicked_luce_interno;
       a="ciao";
       println(a);
+      port.write(11);
     }
   }
   public void clicked_porta_garage(int mx, int my){
@@ -304,6 +305,7 @@ public class Button {
       clicked_luce_esterno=!clicked_luce_esterno;
       a="ciao3";
       println(a);
+      port.write(13);
     }
   }
   public void clicked_cancello(int mx, int my){
