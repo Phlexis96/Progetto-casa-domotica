@@ -41,13 +41,17 @@ void Fluci_esterni(){
     if(luci_esterni==16) automazione=true;
     if(luci_esterni==111) checkmenu=true;
   }
-  if(Serial.available()) scelta_automazione=Serial.read();
+  scelta_automazione=Serial.read();
   if(scelta_automazione==16) automazione=true;
   
-  if(scelta_automazione==111) checkmenu=true;
+  if(scelta_automazione==111){
+    checkmenu=true;
+    menu=0;
+  }
 }
+
 void Fluci_interni(){
-  if(Serial.available())luci_interni=Serial.read();
+  luci_interni=Serial.read();
   if(luci_interni==1){
     digitalWrite(2, LOW);
     digitalWrite(3, LOW);
@@ -88,7 +92,10 @@ void Fluci_interni(){
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
   }
-  else if(luci_interni==111) checkmenu=true;
+  else if(luci_interni==111){
+    checkmenu=true;
+    menu=0;
+  }
 }
 
 void Fcancello(){
@@ -97,7 +104,10 @@ void Fcancello(){
   if(cancello==17) gradi=1;
   else if(cancello==18) gradi=-1;
   else if(cancello==19) gradi=0;
-  else if(cancello==111) checkmenu=true;
+  else if(cancello==111){ 
+    checkmenu=true;
+    menu=0;
+  }
 }
 
 void loop() {
