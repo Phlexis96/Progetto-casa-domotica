@@ -96,12 +96,8 @@ void Fcancello(){
   cancello=Serial.read();
   if(cancello==17) gradi=1;
   else if(cancello==18) gradi=-1;
-  else if(cancello==19){
-  gradi=0;
-  //movimento=false;
-  }
-  myStepper.step(gradi);
-  if(cancello==111) checkmenu=true;
+  else if(cancello==19) gradi=0;
+  else if(cancello==111) checkmenu=true;
 }
 
 void loop() {
@@ -127,7 +123,7 @@ void loop() {
     checkmenu=false;
     Fcancello(); //funzione menu cancello
   }
-  myStepper.step(gradi);
+  if(gradi!=0) myStepper.step(gradi);
 }
 
 
