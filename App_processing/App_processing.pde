@@ -197,9 +197,7 @@ void luciesterno(){
 }
 
 void controllo(){
-  //if(a=="ciao") port.write(11);
   if(a=="ciao8") port.write(111);
-  //else if(a=="ciao3") port.write(13);
 }
 
 void cancello(){
@@ -210,6 +208,21 @@ void cancello(){
   fill(0);
   textSize(25);
   text(" INDIETRO",larghezza/2-65,altezza-20);
+  rect(larghezza/2+70,altezza/2-120,8,110,10);
+  rect(larghezza/2+50,altezza/2-120,8,110,10);
+  rect(larghezza/2+30,altezza/2-120,8,110,10);
+  rect(larghezza/2+10,altezza/2-120,8,110,10);
+  rect(larghezza/2-10,altezza/2-120,8,110,10);
+  rect(larghezza/2-30,altezza/2-120,8,110,10);
+  rect(larghezza/2-50,altezza/2-120,8,110,10);
+  rect(larghezza/2-70,altezza/2-120,8,110,10);
+  rect(larghezza/2-80,altezza/2-105,170,8,10);
+  rect(larghezza/2-80,altezza/2-30,170,8,10);
+  rect(larghezza/2-60,altezza/2-171,110,4);
+  triangle(larghezza/2-60,altezza/2-177,larghezza/2-60,altezza/2-160,larghezza/2-70,altezza/2-169);
+  textSize(40);
+  text("CANCELLO",larghezza/2-105,altezza/2+70);
+  strokeWeight(1);
 }
 
 void draw(){
