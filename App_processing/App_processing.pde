@@ -196,9 +196,6 @@ void luciesterno(){
   text(" INDIETRO",larghezza/2-65,altezza-20);
 }
 
-void controllo(){
-  if(a=="ciao8") port.write(111);
-}
 
 void cancello(){
   fill(255,0,255);
@@ -226,28 +223,24 @@ void cancello(){
 }
 
 void draw(){
-  controllo();
+  if(a=="ciao8") port.write(111);
   primavolta=true;
   if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
   else if(clicked_luce_interno==true){
     tastiluci=true;
     luceinterno();
-    controllo();
    }
   else if(clicked_porta_garage==true){
     tastogarage=true;
     portagarage();
-    controllo();
   }
   else if(clicked_luce_esterno==true){
     tastoluciesterne=true;
     luciesterno();
-    controllo();
   }
   else if(clicked_cancello==true){
     tastocancello=true;
     cancello();
-    controllo();
   }
 }
 
