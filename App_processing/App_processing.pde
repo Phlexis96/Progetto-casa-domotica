@@ -15,6 +15,7 @@ boolean clicked_porta_garage_apertura=false;  //porta garage menù garage
 boolean clicked_luci_esterno=false;  //luci esterno menù luci esterno
 boolean clicked_automazione=false;  //automazione luci esterno
 boolean clicked_apertura_cancello=false; //tasto per aprire il cancello
+boolean clicked_switch=false; //tasto per cambiare menu
 boolean tastiluci=false;
 boolean tastogarage=false;
 boolean tastoluciesterne=false;
@@ -25,11 +26,21 @@ int casa_ino=0;
 int corridoio_ino=0;
 int garage_ino=0;
 String a;
+PImage scena;
+PImage termometro;
+PImage luce;
+PImage cancello;
+PImage garage;
 Serial port;
 void setup(){
   fullScreen();
-  //size(1920,1080);
+  //size(1280,720);
   port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
+  scena = loadImage("pngegg.png");
+  termometro = loadImage("termometro.png");
+  luce = loadImage("luce.png");
+  cancello = loadImage("cancello.png");
+  garage = loadImage("garage.png");
   background(0);
 }
 
@@ -51,50 +62,20 @@ void tasti(){
   rect(0,0,larghezza,altezza/25);
   fill(0);
   //Simbolo lampadina
-  ellipse(larghezza/4-10,altezza/4-100,100,100);
-  rect(larghezza/4-35,altezza/4-70,50,55,10);
-  rect(larghezza/4-32,altezza/4-10,44,5,10);
-  rect(larghezza/4-32,altezza/4,44,5,10);
-  rect(larghezza/4-32,altezza/4+10,44,5,10);
+  image(luce,larghezza/5.5,altezza/12,altezza/4.11,altezza/4.11);
   textSize(height/36);
-  text("     LUCI\n INTERNO",larghezza/4-105,altezza/4+70);
+  text("     LUCI\n INTERNO",larghezza/4-altezza/13.7,altezza/4+altezza/10);
   //Simbolo garage
-  rect(larghezza/4*3-70,altezza/4-80,140,70);
-  triangle(larghezza/4*3-69,altezza/4-81,larghezza/4*3+69,altezza/4-81,larghezza/4*3,altezza/4-110);
-  stroke(255);
-  rect(larghezza/4*3-55,altezza/4-70,110,10);
-  rect(larghezza/4*3-55,altezza/4-60,110,10);
-  rect(larghezza/4*3-55,altezza/4-50,110,10);
-  rect(larghezza/4*3-55,altezza/4-40,110,10);
-  rect(larghezza/4*3-55,altezza/4-30,110,10);
-  rect(larghezza/4*3-55,altezza/4-20,110,10);
-  stroke(0);
-  fill(255);
-  ellipse(larghezza/4*3,altezza/4-90,10,10);
+  image(garage,larghezza/10*6.95,altezza/9,height/4.8,height/4.8);
   fill(0);
-  text(" PORTA\nGARAGE",larghezza/4*3-77,altezza/4+70);
+  text(" PORTA\nGARAGE",larghezza/4*3-height/18.7,altezza/4+height/10);
   //Simbolo lampadina 2
-  ellipse(larghezza/4-10,altezza/4*3-100,100,100);
-  rect(larghezza/4-35,altezza/4*3-70,50,55,10);
-  rect(larghezza/4-32,altezza/4*3-10,44,5,10);
-  rect(larghezza/4-32,altezza/4*3,44,5,10);
-  rect(larghezza/4-32,altezza/4*3+10,44,5,10);
+  image(luce,larghezza/5.5,altezza/10*5.7,altezza/4.11,altezza/4.11);
   textSize(height/36);
-  text("     LUCI\n ESTERNO",larghezza/4-105,altezza/4*3+70);
+  text("     LUCI\n ESTERNO",larghezza/4-height/13.7,altezza/4*3+height/12);
   //Simbolo cancello
-  rect(larghezza/4*3+70,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3+50,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3+30,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3+10,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3-10,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3-30,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3-50,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3-70,altezza/4*3-120,8,110,10);
-  rect(larghezza/4*3-80,altezza/4*3-105,170,8,10);
-  rect(larghezza/4*3-80,altezza/4*3-30,170,8,10);
-  rect(larghezza/4*3-60,altezza/4*3-171,110,4);
-  triangle(larghezza/4*3-60,altezza/4*3-177,larghezza/4*3-60,altezza/4*3-160,larghezza/4*3-70,altezza/4*3-169);
-  text("CANCELLO",larghezza/4*3-105,altezza/4*3+70);
+  image(cancello,larghezza/10*6.9,altezza/10*6.2,height/4.5,height/5);
+  text("CANCELLO",larghezza/4*3-height/13.71,altezza/4*3+height/9);
   strokeWeight(1);
 }
 
@@ -115,29 +96,17 @@ void luceinterno(){
   rect(0,altezza-(altezza/25),larghezza,altezza/25);
   fill(0);
   textSize(height/57);
-  text(" INDIETRO",larghezza/2-65,altezza-20);
+  text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
   textSize(height/36);
   //prima lampadina
-  ellipse(larghezza/2-10,altezza/5-150,100,100);
-  rect(larghezza/2-35,altezza/5-120,50,55,10);
-  rect(larghezza/2-32,altezza/5-60,44,5,10);
-  rect(larghezza/2-32,altezza/5-50,44,5,10);
-  rect(larghezza/2-32,altezza/5-40,44,5,10);
-  text("  LUCE\nCUCINA",larghezza/2-83,altezza/5+10);
+  image(luce,larghezza/2-larghezza/16,altezza/100,height/4.8,height/4.8);
+  text("  LUCE\nCUCINA",larghezza/2-width/31,altezza/5+altezza/20);
   //seconda lampadina
-  ellipse(larghezza/2-10,altezza/5*2.7-150,100,100);
-  rect(larghezza/2-35,altezza/5*2.7-120,50,55,10);
-  rect(larghezza/2-32,altezza/5*2.7-60,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7-50,44,5,10);
-  rect(larghezza/2-32,altezza/5*2.7-40,44,5,10);
-  text("  LUCE\nSALONE",larghezza/2-83,altezza/5*2.7+10);
+  image(luce,larghezza/2-larghezza/16,altezza/3+altezza/100,height/4.8,height/4.8);
+  text("  LUCE\nSALONE",larghezza/2-width/31,altezza/5*2.7+altezza/20);
   //terza lampadina
-  ellipse(larghezza/2-10,altezza/5*4.3-150,100,100);
-  rect(larghezza/2-35,altezza/5*4.3-120,50,55,10);
-  rect(larghezza/2-32,altezza/5*4.3-60,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3-50,44,5,10);
-  rect(larghezza/2-32,altezza/5*4.3-40,44,5,10);
-  text("   LUCE\n GARAGE",larghezza/2-95,altezza/5*4.3+10);
+  image(luce,larghezza/2-larghezza/16,altezza-altezza/3+altezza/100,height/4.8,height/4.8);
+  text("   LUCE\n GARAGE",larghezza/2-width/28,altezza/5*4.3+altezza/20);
   strokeWeight(1);
 }
 
@@ -146,28 +115,12 @@ void portagarage(){
   int larghezza=width, altezza=height;
   fill(0,100,255);  //blu
   rect(0,0,larghezza,altezza);
-  fill(0);
-  rect(larghezza/2-140,altezza/2-80,140*2,70*2-8);
-  triangle(larghezza/2-139,altezza/2-81,larghezza/2+139,altezza/2-81,larghezza/2,altezza/2-165);
-  stroke(255);
-  strokeWeight(4);
-  rect(larghezza/2-110,altezza/2-70,220,20);
-  rect(larghezza/2-110,altezza/2-50,220,20);
-  if(clicked_porta_garage_apertura==false){
-  rect(larghezza/2-110,altezza/2-30,220,20);
-  rect(larghezza/2-110,altezza/2-10,220,20);
-  rect(larghezza/2-110,altezza/2+10,220,20);
-  rect(larghezza/2-110,altezza/2+30,220,20);
-  }
-  strokeWeight(2);
-  stroke(0);
-  fill(255);
-  ellipse(larghezza/2,altezza/2-110,20,20);
+  image(garage,larghezza/2-altezza/9.6,altezza/2-altezza/9.6,height/4.8,height/4.8);
   fill(130);
   rect(0,altezza-(altezza/25),larghezza,altezza/25);
   fill(0);
   textSize(height/57);
-  text(" INDIETRO",larghezza/2-65,altezza-20);
+  text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
 }
 
 
@@ -180,22 +133,18 @@ void luciesterno(){
   else fill(0,120,10);
   rect(larghezza/2+1,0,larghezza,altezza);
   //Lampadina
-  fill(0);
-  ellipse(larghezza/4,altezza/2-100,200,200);
-  rect(larghezza/4-50,altezza/2-70,100,110,10);
-  rect(larghezza/4-44,altezza/2+50,88,10,10);
-  rect(larghezza/4-44,altezza/2+70,88,10,10);
-  rect(larghezza/4-44,altezza/2+90,88,10,10);
-  fill(130);
-  rect(0,altezza-(altezza/25),larghezza,altezza/25);
+  image(luce,larghezza/5.5,altezza/10*3.3,altezza/4.11,altezza/4.11);
   fill(0);
   textSize(height/36);
-  text("   LUCE\nESTERNO",larghezza/4-84,altezza/5*3);
-  text("AUTOMAZIONE",larghezza/4*3-84,altezza/5*3);
+  text("   LUCE\nESTERNO",larghezza/4-height/17.1,altezza/5*3);
+  text("AUTOMAZIONE",larghezza/4*3-height/17.1,altezza/5*3);
   if(clicked_automazione==true) text("ON",larghezza/4*3+10,altezza/5*3+40);
   else text("OFF",larghezza/4*3+10,altezza/5*3+40);
+  fill(130);
+  rect(0,altezza-(altezza/25),larghezza,altezza/25);
   textSize(height/57);
-  text(" INDIETRO",larghezza/2-65,altezza-20);
+  fill(0);
+  text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
 }
 
 
@@ -206,7 +155,7 @@ void cancello(){
   rect(0,altezza-(altezza/25),larghezza,altezza/25);
   fill(0);
   textSize(height/57);
-  text(" INDIETRO",larghezza/2-65,altezza-20);
+  text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
   rect(larghezza/2+70,altezza/2-120,8,110,10);
   rect(larghezza/2+50,altezza/2-120,8,110,10);
   rect(larghezza/2+30,altezza/2-120,8,110,10);
@@ -224,26 +173,47 @@ void cancello(){
   strokeWeight(1);
 }
 
+void tasti2(){
+  fill(0);
+  strokeWeight(2);
+  stroke(0);
+  rect(0,altezza/25,larghezza,altezza-altezza/25);
+  fill(204,101,255);
+  rect(0,altezza/25,larghezza/2,altezza-altezza/25);
+  fill(24,255,132);
+  rect(larghezza/2,altezza/25,larghezza/2,altezza-altezza/25);
+  strokeWeight(1);
+  image(scena,larghezza/6.5,altezza/4,height/3.5,height/3.5);
+  fill(0);
+  textSize(height/20);
+  text("SCENE",larghezza/5.3,altezza/10*7);
+  image(termometro,larghezza/10*6.5,altezza/4,height/3.5,height/3.5);
+  text("TEMPERATURA",larghezza/10*6.5,altezza/10*7);
+}
+
 void draw(){
   if(a=="ciao8") port.write(111);
   primavolta=true;
-  if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
-  else if(clicked_luce_interno==true){
-    tastiluci=true;
-    luceinterno();
-   }
-  else if(clicked_porta_garage==true){
-    tastogarage=true;
-    portagarage();
+  if(clicked_switch==false){
+    if(clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) tasti();
+    else if(clicked_luce_interno==true){
+      tastiluci=true;
+      luceinterno();
+     }
+    else if(clicked_porta_garage==true){
+      tastogarage=true;
+      portagarage();
+    }
+    else if(clicked_luce_esterno==true){
+      tastoluciesterne=true;
+      luciesterno();
+    }
+    else if(clicked_cancello==true){
+      tastocancello=true;
+      cancello();
+    }
   }
-  else if(clicked_luce_esterno==true){
-    tastoluciesterne=true;
-    luciesterno();
-  }
-  else if(clicked_cancello==true){
-    tastocancello=true;
-    cancello();
-  }
+  else if(clicked_switch==true) tasti2();
 }
 
 
@@ -260,6 +230,7 @@ void mousePressed(){
   Button luciesterno = new Button(0,0);
   Button automazione = new Button(larghezza/2+1,0);
   Button apertura_cancello = new Button(0,0);
+  Button Switch = new Button(0,0);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -272,6 +243,7 @@ void mousePressed(){
   luciesterno.clicked_luci_esterno(mouseX,mouseY);
   automazione.clicked_automazione(mouseX,mouseY);
   apertura_cancello.clicked_apertura_cancello(mouseX,mouseY);
+  Switch.clicked_switch(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -294,7 +266,7 @@ public class Button {
     rect(x,y,w,h);
   }
   public void clicked_luce_interno(int mx, int my){
-    if(mx>x && mx<x+w && my>y && my<(h-altezza/25)+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+    if(mx>x && mx<x+w && my>y && my<(h-altezza/25)+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false && clicked_switch==false) {
       clicked_luce_interno=!clicked_luce_interno;
       a="ciao";
       println(a);
@@ -302,14 +274,14 @@ public class Button {
     }
   }
   public void clicked_porta_garage(int mx, int my){
-    if(mx>x && mx<x+w && my>y && my<(h-altezza/25)+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+    if(mx>x && mx<x+w && my>y && my<(h-altezza/25)+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false && clicked_switch==false) {
       clicked_porta_garage=!clicked_porta_garage;
       a="ciao2";
       println(a);
     }
   }
   public void clicked_luce_esterno(int mx, int my){
-    if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+    if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false && clicked_switch==false) {
       clicked_luce_esterno=!clicked_luce_esterno;
       a="ciao3";
       println(a);
@@ -317,7 +289,7 @@ public class Button {
     }
   }
   public void clicked_cancello(int mx, int my){
-    if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+    if(mx>x && mx<x+w && my>y && my<h+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false && clicked_switch==false) {
       clicked_cancello=!clicked_cancello;
       a="ciao4";
       port.write(14);
@@ -464,7 +436,7 @@ public class Button {
       println(a);
       if(clicked_automazione==true) {
         port.write(16);
-    }
+      }
       else if(clicked_automazione==false) port.write(15);
     }
   }
@@ -493,6 +465,12 @@ public class Button {
         println(19);
         pausacancello=0;
       }
+    }
+  }
+  public void clicked_switch(int mx, int my){
+    if(mx>x && mx<x+w1 && my>y && my<h2+y && clicked_luce_interno==false && clicked_porta_garage==false && clicked_luce_esterno==false && clicked_cancello==false) {
+      clicked_switch = !clicked_switch;
+      println("ciao13");
     }
   }
   public void clicked_indietro(int mx, int my){
