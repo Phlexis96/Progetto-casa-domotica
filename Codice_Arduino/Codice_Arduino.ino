@@ -13,7 +13,7 @@ int tastoindietro=1;
 const int sensorPin = A0; // Pin connected to sensor
 int sensorVal; // Analog value from the sensor
 int lux; //Lux value
-int cancello=19, excancello=0;
+int cancello=19;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
 void setup() {
@@ -123,15 +123,15 @@ void loop() {
   } 
   if(menu==11){        //Menu delle luci interne
     checkmenu=false;
-    Fluci_interni(); //Funzione che controlla le luci interne
+    Fluci_interni();  //Funzione che controlla le luci interne
   }
   if(menu==13){ //menu luci esterne
     checkmenu=false;
-    Fluci_esterni(); //funzione menu luci esterne
+    Fluci_esterni();  //funzione menu luci esterne
   }
   if(menu==14){ //menu cancello
     checkmenu=false;
-    Fcancello(); //funzione menu cancello
+    Fcancello();  //funzione menu cancello
   }
   if(gradi!=0) myStepper.step(gradi);
 }
@@ -139,7 +139,7 @@ void loop() {
 
 int sensorRawToPhys(int raw){
   // Conversion rule
-  float Vout = float(raw) * (VIN / float(1023));// Conversion analog to voltage
+  float Vout = float(raw) * (VIN / float(1023));  // Conversion analog to voltage
   float RLDR = (R * (VIN - Vout))/Vout; // Conversion voltage to resistance
   int phys=500/(RLDR/1000); // Conversion resitance to lumen
   return phys;
