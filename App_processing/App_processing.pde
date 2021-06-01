@@ -61,16 +61,13 @@ void tasti(){
   fill(50);  //Switch
   rect(0,0,larghezza,altezza/25);
   fill(0);
-  //Simbolo lampadina
-  image(luce,larghezza/5.5,altezza/12,altezza/4.11,altezza/4.11);
+  image(luce,larghezza/5.5,altezza/12,altezza/4.11,altezza/4.11);  //Simbolo lampadina
   textSize(height/36);
   text("     LUCI\n INTERNO",larghezza/4-altezza/13.7,altezza/4+altezza/10);
-  //Simbolo garage
-  image(garage,larghezza/10*6.95,altezza/9,height/4.8,height/4.8);
+  image(garage,larghezza/10*6.95,altezza/9,height/4.8,height/4.8);  //Simbolo garage
   fill(0);
   text(" PORTA\nGARAGE",larghezza/4*3-height/18.7,altezza/4+height/10);
-  //Simbolo lampadina 2
-  image(luce,larghezza/5.5,altezza/10*5.7,altezza/4.11,altezza/4.11);
+  image(luce,larghezza/5.5,altezza/10*5.7,altezza/4.11,altezza/4.11);  //Simbolo lampadina 2
   textSize(height/36);
   text("     LUCI\n ESTERNO",larghezza/4-height/13.7,altezza/4*3+height/12);
   //Simbolo cancello
@@ -98,14 +95,11 @@ void luceinterno(){
   textSize(height/57);
   text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
   textSize(height/36);
-  //prima lampadina
-  image(luce,larghezza/2-larghezza/16,altezza/100,height/4.8,height/4.8);
+  image(luce,larghezza/2-larghezza/16,altezza/100,height/4.8,height/4.8);  //prima lampadina
   text("  LUCE\nCUCINA",larghezza/2-width/31,altezza/5+altezza/20);
-  //seconda lampadina
-  image(luce,larghezza/2-larghezza/16,altezza/3+altezza/100,height/4.8,height/4.8);
+  image(luce,larghezza/2-larghezza/16,altezza/3+altezza/100,height/4.8,height/4.8);  //seconda lampadina
   text("  LUCE\nSALONE",larghezza/2-width/31,altezza/5*2.7+altezza/20);
-  //terza lampadina
-  image(luce,larghezza/2-larghezza/16,altezza-altezza/3+altezza/100,height/4.8,height/4.8);
+  image(luce,larghezza/2-larghezza/16,altezza-altezza/3+altezza/100,height/4.8,height/4.8);  //terza lampadina
   text("   LUCE\n GARAGE",larghezza/2-width/28,altezza/5*4.3+altezza/20);
   strokeWeight(1);
 }
@@ -115,7 +109,7 @@ void portagarage(){
   int larghezza=width, altezza=height;
   fill(0,100,255);  //blu
   rect(0,0,larghezza,altezza);
-  image(garage,larghezza/2-altezza/9.6,altezza/2-altezza/9.6,height/4.8,height/4.8);
+  image(garage,larghezza/2-altezza/9.6,altezza/2-altezza/6,height/4.8,height/4.8);
   fill(130);
   rect(0,altezza-(altezza/25),larghezza,altezza/25);
   fill(0);
@@ -132,8 +126,7 @@ void luciesterno(){
   if(clicked_automazione==true) fill(0,255,50);
   else fill(0,120,10);
   rect(larghezza/2+1,0,larghezza,altezza);
-  //Lampadina
-  image(luce,larghezza/5.5,altezza/10*3.3,altezza/4.11,altezza/4.11);
+  image(luce,larghezza/5.5,altezza/10*3.3,altezza/4.11,altezza/4.11);  //Lampadina
   fill(0);
   textSize(height/36);
   text("   LUCE\nESTERNO",larghezza/4-height/17.1,altezza/5*3);
@@ -156,20 +149,9 @@ void cancello(){
   fill(0);
   textSize(height/57);
   text(" INDIETRO",larghezza/2-height/22.15,altezza-height/72);
-  rect(larghezza/2+70,altezza/2-120,8,110,10);
-  rect(larghezza/2+50,altezza/2-120,8,110,10);
-  rect(larghezza/2+30,altezza/2-120,8,110,10);
-  rect(larghezza/2+10,altezza/2-120,8,110,10);
-  rect(larghezza/2-10,altezza/2-120,8,110,10);
-  rect(larghezza/2-30,altezza/2-120,8,110,10);
-  rect(larghezza/2-50,altezza/2-120,8,110,10);
-  rect(larghezza/2-70,altezza/2-120,8,110,10);
-  rect(larghezza/2-80,altezza/2-105,170,8,10);
-  rect(larghezza/2-80,altezza/2-30,170,8,10);
-  rect(larghezza/2-60,altezza/2-171,110,4);
-  triangle(larghezza/2-60,altezza/2-177,larghezza/2-60,altezza/2-160,larghezza/2-70,altezza/2-169);
+  image(cancello,larghezza/2-height/9,altezza/2-height/6,height/4.5,height/5);
   textSize(height/36);
-  text("CANCELLO",larghezza/2-105,altezza/2+70);
+  text("CANCELLO",larghezza/2-height/13.71,altezza/2+height/12);
   strokeWeight(1);
 }
 
