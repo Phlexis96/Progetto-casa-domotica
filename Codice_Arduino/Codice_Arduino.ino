@@ -112,7 +112,7 @@ void loop() {
   //Luci esterne automatiche
   if(automazione==true){
     sensorVal = analogRead(sensorPin);
-    if(sensorVal/5<60) digitalWrite(5,HIGH);
+    if(sensorVal/5<70) digitalWrite(5,HIGH);
     else digitalWrite(5,LOW);
   }
   if (checkmenu==true){
