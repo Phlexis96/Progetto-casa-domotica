@@ -1,15 +1,16 @@
 /*  I.T.T Piersanit Mattarella VD
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
  *  DomoHouse 0.80.2b 12V 
- *  GiHub Edition
+ *  GitHub Edition
  */
 #include <Stepper.h>
+const int sensorPin = A0; // Pin fotoresistenza
+int sensorVal; // Valore analogico della resistenza
 int luci_interni=0 ; // 8casi.
 int menu=0,luci_esterni=15,scelta_automazione=0 ;
 bool checkmenu=true,automazione=false,apertura_cancello=false;
 int tastoindietro=1;
-const int sensorPin = A0; // Pin fotoresistenza
-int sensorVal; // Valore analogico della resistenza
+
 int cancello=19;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
@@ -21,23 +22,28 @@ void setup() {
   pinMode(3,OUTPUT); //corridoio secondo bit 010.
   pinMode(4,OUTPUT); //garage terzo bit 100.
   pinMode(5,OUTPUT); //luci esterne
-  pinMode(A0,OUTPUT);// Fotoresistenza
   myStepper.setSpeed(10);
 }
 
 
 void Fluci_esterni(){
   if(Serial.available()) luci_esterni=Serial.read();
-    if(luci_esterni==15) automazione=false;
-    else if(luci_esterni==16) automazione=true;
-    if(automazione==false){
-      if(luci_esterni==9) digitalWrite(5,HIGH);
-      else if(luci_esterni==10) digitalWrite(5,LOW);
-    }
-    if(luci_esterni==111){
-      checkmenu=true;
-      menu=0;
-    }
+  if(luci_esterni==15) {
+    automazione=false;
+    digitalWrite(5,LOW);
+  }
+  else if(luci_esterni==16) {
+    automazione=true;
+    digitalWrite(5,LOW);
+  }
+  if(automazione==false){
+    if(luci_esterni==9) digitalWrite(5,HIGH);
+    else if(luci_esterni==10) digitalWrite(5,LOW);
+  }
+  if(luci_esterni==111){
+    checkmenu=true;
+    menu=0;
+  }
 }
 
 
@@ -83,7 +89,7 @@ void Fluci_interni(){
     digitalWrite(3, HIGH);
     digitalWrite(4, HIGH);
   }
-  else if(luci_interni==111){
+  if(luci_interni==111){
     checkmenu=true;
     menu=0;
   }
@@ -96,18 +102,17 @@ void Fcancello(){
   if(cancello==17) gradi=1;
   else if(cancello==18) gradi=-1;
   else if(cancello==19) gradi=0;
-  else if(cancello==111){
+  if(cancello==111){
     checkmenu=true;
     menu=0;
   }
 }
 
-
 void loop() {
   //Luci esterne automatiche
   if(automazione==true){
     sensorVal = analogRead(sensorPin);
-    if(sensorVal<1) digitalWrite(5,HIGH);
+    if(sensorVal/5<60) digitalWrite(5,HIGH);
     else digitalWrite(5,LOW);
   }
   if (checkmenu==true){

@@ -35,7 +35,7 @@ Serial port;
 void setup(){
   fullScreen();
   //size(1280,720);
-  port = new Serial(this, Serial.list()[0], 115200); //Variabile luce
+  port = new Serial(this, Serial.list()[0], 9600); //Variabile luce
   scena = loadImage("pngegg.png");
   termometro = loadImage("termometro.png");
   luce = loadImage("luce.png");
@@ -403,7 +403,7 @@ public class Button {
     }
   }
   public void clicked_luci_esterno(int mx, int my){
-    if(mx>x && mx<x+larghezza/2-1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true) {
+    if(mx>x && mx<x+larghezza/2-1 && my>y && my<h3+y && clicked_luce_esterno==true && tastoluciesterne==true && clicked_automazione==false) {
       clicked_luci_esterno=!clicked_luci_esterno;
       a="ciao10";
       println(a);
@@ -418,6 +418,7 @@ public class Button {
       println(a);
       if(clicked_automazione==true) {
         port.write(16);
+        clicked_luci_esterno=false;
       }
       else if(clicked_automazione==false) port.write(15);
     }
