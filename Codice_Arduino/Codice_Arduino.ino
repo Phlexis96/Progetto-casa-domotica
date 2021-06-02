@@ -23,8 +23,13 @@ void setup(){
 }
 
 void Fluci_esterni(){
-  if (Serial.available())
-    luci_esterni = Serial.read();
+  luci_esterni = Serial.read();
+  if (automazione == false){
+    if (luci_esterni == 9)
+      digitalWrite(5, HIGH);
+    else if (luci_esterni == 10)
+      digitalWrite(5, LOW);
+  }
   if (luci_esterni == 15){
     automazione = false;
     digitalWrite(5, LOW);
@@ -32,12 +37,6 @@ void Fluci_esterni(){
   else if (luci_esterni == 16){
     automazione = true;
     digitalWrite(5, LOW);
-  }
-  if (automazione == false){
-    if (luci_esterni == 9)
-      digitalWrite(5, HIGH);
-    else if (luci_esterni == 10)
-      digitalWrite(5, LOW);
   }
   if (luci_esterni == 111){
     checkmenu = true;
