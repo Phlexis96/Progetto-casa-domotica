@@ -4,51 +4,42 @@
  *  GiHub Edition
  */
 #include <Stepper.h>
-#define VIN 5
-#define R 200
 int luci_interni=0 ; // 8casi.
-int menu=0,luci_esterni=0,scelta_automazione=0 ;
+int menu=0,luci_esterni=15,scelta_automazione=0 ;
 bool checkmenu=true,automazione=false,apertura_cancello=false;
 int tastoindietro=1;
-const int sensorPin = A0; // Pin connected to sensor
-int sensorVal; // Analog value from the sensor
-int lux; //Lux value
+const int sensorPin = A0; // Pin fotoresistenza
+int sensorVal; // Valore analogico della resistenza
 int cancello=19;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
+
+
 void setup() {
- Serial.begin(115200);
- pinMode(2,OUTPUT); //casa primo bit 001.
- pinMode(3,OUTPUT); //corridoio secondo bit 010.
- pinMode(4,OUTPUT); //garage terzo bit 100.
- pinMode(5,OUTPUT); //luci esterne
- pinMode(A0,OUTPUT);// Fotoresistenza
- myStepper.setSpeed(10);
+  Serial.begin(9600);
+  pinMode(2,OUTPUT); //casa primo bit 001.
+  pinMode(3,OUTPUT); //corridoio secondo bit 010.
+  pinMode(4,OUTPUT); //garage terzo bit 100.
+  pinMode(5,OUTPUT); //luci esterne
+  pinMode(A0,OUTPUT);// Fotoresistenza
+  myStepper.setSpeed(10);
 }
+
+
 void Fluci_esterni(){
-  if(scelta_automazione==15){
-    automazione=false;
-    digitalWrite(5,LOW);
-  }
-  if(automazione==false){
-    if(Serial.available()) luci_esterni=Serial.read();
-    if(luci_esterni==9){
-      digitalWrite(5,HIGH);
+  if(Serial.available()) luci_esterni=Serial.read();
+    if(luci_esterni==15) automazione=false;
+    else if(luci_esterni==16) automazione=true;
+    if(automazione==false){
+      if(luci_esterni==9) digitalWrite(5,HIGH);
+      else if(luci_esterni==10) digitalWrite(5,LOW);
     }
-    else if(luci_esterni==10){
-      digitalWrite(5,LOW);
+    if(luci_esterni==111){
+      checkmenu=true;
+      menu=0;
     }
-    if(luci_esterni==16) automazione=true;
-    if(luci_esterni==111) checkmenu=true;
-  }
-  scelta_automazione=Serial.read();
-  if(scelta_automazione==16) automazione=true;
-  
-  if(scelta_automazione==111){
-    checkmenu=true;
-    menu=0;
-  }
 }
+
 
 void Fluci_interni(){
   luci_interni=Serial.read();
@@ -98,29 +89,30 @@ void Fluci_interni(){
   }
 }
 
+
 void Fcancello(){
   //gradi = map(gradi, 0, 360, 0, 2048);
   cancello=Serial.read();
   if(cancello==17) gradi=1;
   else if(cancello==18) gradi=-1;
   else if(cancello==19) gradi=0;
-  else if(cancello==111){ 
+  else if(cancello==111){
     checkmenu=true;
     menu=0;
   }
 }
 
+
 void loop() {
   //Luci esterne automatiche
   if(automazione==true){
-    if(lux<1) digitalWrite(5,HIGH);
-    else if(lux>=1)digitalWrite(5,LOW);
+    sensorVal = analogRead(sensorPin);
+    if(sensorVal<1) digitalWrite(5,HIGH);
+    else digitalWrite(5,LOW);
   }
-  sensorVal = analogRead(sensorPin);
-  lux=sensorRawToPhys(sensorVal);
   if (checkmenu==true){
-    menu=Serial.read();
-  } 
+    if(Serial.available()) menu=Serial.read();
+  }
   if(menu==11){        //Menu delle luci interne
     checkmenu=false;
     Fluci_interni();  //Funzione che controlla le luci interne
@@ -134,13 +126,4 @@ void loop() {
     Fcancello();  //funzione menu cancello
   }
   if(gradi!=0) myStepper.step(gradi);
-}
-
-
-int sensorRawToPhys(int raw){
-  // Conversion rule
-  float Vout = float(raw) * (VIN / float(1023));  // Conversion analog to voltage
-  float RLDR = (R * (VIN - Vout))/Vout; // Conversion voltage to resistance
-  int phys=500/(RLDR/1000); // Conversion resitance to lumen
-  return phys;
 }
