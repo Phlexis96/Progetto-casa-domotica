@@ -1,6 +1,5 @@
 /*  I.T.T Piersanit Mattarella VD
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
- *  GitHub Edition
  */
 #include <Stepper.h>
 const int sensorPin = A0; // Pin fotoresistenza
