@@ -21,6 +21,7 @@ long dis;
 long tocm;
 int misure[3];
 int i;
+int passi = 200;
 
 void setup(){
   Serial.begin(9600);
@@ -110,12 +111,13 @@ void Fluci_interni(){
 
 void Fcancello()
 {
-  //gradi = map(gradi, 0, 360, 0, 2048);
   cancello = Serial.read();
-  if (cancello == 17)
+  if (cancello == 17){
     gradi = -1;
-  else if (cancello == 18)
+  }
+  if (cancello == 18){
     gradi = 200;
+  }
   else if (cancello == 19)
     gradi = 0;
   if (cancello == 111){
@@ -125,6 +127,17 @@ void Fcancello()
 }
 
 void loop(){
+  if(passi >= 2200){
+    cancello = 19;
+    gradi = 0;
+    delay(2000);
+    cancello = 18;
+    gradi = 200;
+  }
+  if(passi <= 0){
+    cancello = 19;
+    gradi = 0;
+  }
   //Sensore cancello
   if(gradi > 0){
     digitalWrite(out,LOW);
@@ -166,8 +179,11 @@ void loop(){
     checkmenu = false;
     Fcancello(); //funzione menu cancello
   }
-  if (gradi != 0)
+  if (gradi != 0){
     myStepper.step(gradi);
+    if(gradi < 0) passi = passi+1;
+    if(gradi > 0) passi = passi-200;
+  }
 }
 
 int sensorRawToPhys(int raw){
