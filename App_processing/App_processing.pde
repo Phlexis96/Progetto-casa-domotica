@@ -35,8 +35,8 @@ Serial port;
 
 
 void setup() {
-  fullScreen();
-  //size(1280,720);
+  //fullScreen();
+  size(displayWidth,displayHeight);
   port = new Serial(this, Serial.list()[0], 9600); //Variabile luce
   scena = loadImage("pngegg.png");
   termometro = loadImage("termometro.png");
@@ -178,6 +178,7 @@ void tasti2() {
 void draw() {
   if (a ==  "ciao8") port.write(111);
   primavolta = true;
+  if(port.read()==19) pausacancello=0;
   if (clicked_switch ==  false) {
     if (clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false) tasti();
     else if (clicked_luce_interno ==  true) {
