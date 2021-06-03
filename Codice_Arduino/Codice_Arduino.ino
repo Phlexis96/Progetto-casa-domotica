@@ -2,16 +2,25 @@
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
  */
 #include <Stepper.h>
+#define VIN 5 // V power voltage
+#define R 10000 //ohm resistance value
 const int sensorPin = A0; // Pin fotoresistenza
 int sensorVal;            // Valore analogico della resistenza
 int luci_interni = 0;     // 8casi.
 int menu = 0, luci_esterni = 15, scelta_automazione = 0;
 bool checkmenu = true, automazione = false, apertura_cancello = false;
 int tastoindietro = 1;
-
+int lux;
 int cancello = 19;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
+const int out=12;
+const int in=13;
+long dur;
+long dis;
+long tocm;
+int misure[3];
+int i;
 
 void setup(){
   Serial.begin(9600);
@@ -19,6 +28,8 @@ void setup(){
   pinMode(3, OUTPUT); //corridoio secondo bit 010.
   pinMode(4, OUTPUT); //garage terzo bit 100.
   pinMode(5, OUTPUT); //luci esterne
+  pinMode(in, INPUT);
+  pinMode(out, OUTPUT);
   myStepper.setSpeed(10);
 }
 
@@ -102,9 +113,9 @@ void Fcancello()
   //gradi = map(gradi, 0, 360, 0, 2048);
   cancello = Serial.read();
   if (cancello == 17)
-    gradi = 1;
-  else if (cancello == 18)
     gradi = -1;
+  else if (cancello == 18)
+    gradi = 200;
   else if (cancello == 19)
     gradi = 0;
   if (cancello == 111){
@@ -114,10 +125,27 @@ void Fcancello()
 }
 
 void loop(){
+  //Sensore cancello
+  if(gradi > 0){
+    digitalWrite(out,LOW);
+    digitalWrite(out,HIGH);
+    digitalWrite(out,LOW);
+    dur=pulseIn(in,HIGH);
+    tocm=microsecondsToCentimeters(dur);
+    if(tocm < 21) {
+      cancello = 19;
+      gradi = 0;
+      Serial.println(19);
+      delay(2000);
+      cancello = 17;
+      gradi =- 1;
+    }
+  }
   //Luci esterne automatiche
   if (automazione == true){
     sensorVal = analogRead(sensorPin);
-    if (sensorVal / 5 < 70)
+    lux=sensorRawToPhys(sensorVal);
+    if (lux< 60)
       digitalWrite(5, HIGH);
     else
       digitalWrite(5, LOW);
@@ -140,4 +168,17 @@ void loop(){
   }
   if (gradi != 0)
     myStepper.step(gradi);
+}
+
+int sensorRawToPhys(int raw){
+  // Conversion rule
+  float Vout = float(raw) * (VIN / float(1023));// Conversion analog to voltage
+  float RLDR = (R * (VIN - Vout))/Vout; // Conversion voltage to resistance
+  int phys=500/(RLDR/1000); // Conversion resitance to lumen
+  return phys;
+}
+
+long microsecondsToCentimeters(long microseconds)
+{
+return microseconds / 29 / 2;
 }
