@@ -119,13 +119,13 @@ void Fluci_interni(){
 void Fcancello()
 {
     cancello = Serial.read();
-   if (cancello == 17 && inverter == false){
+   if (cancello == 17){
    gradi = -1;
    }
    else if (cancello == 17 && inverter == true){
    gradi = 200;
    }
-   if (cancello == 18 && inverter == false){
+   if (cancello == 18){
    gradi = 200;
    }
    else if (cancello == 18 && inverter == true){
@@ -151,7 +151,9 @@ void Fservomotore(){
 void loop(){
   if(passi >= 2200){
     inverter = !inverter;
-    cancello = 19;
+    Fcancello();
+  }
+    /* cancello = 19;
     gradi = 0;
     delay(2000);
     cancello = 17;
@@ -160,7 +162,7 @@ void loop(){
   else if(passi < 0){
     cancello = 19;
     gradi = 0;
-  }
+  } */
   //Sensore cancello
   if(gradi > 0){
     digitalWrite(out,LOW);
