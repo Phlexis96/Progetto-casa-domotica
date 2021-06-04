@@ -21,7 +21,8 @@ long dis;
 long tocm;
 int misure[3];
 int i;
-int passi = 200;
+int passi = 0;
+boolean inverter = false;
 
 void setup(){
   Serial.begin(9600);
@@ -111,30 +112,37 @@ void Fluci_interni(){
 
 void Fcancello()
 {
-  cancello = Serial.read();
-  if (cancello == 17){
-    gradi = -1;
-  }
-  if (cancello == 18){
-    gradi = 200;
-  }
-  else if (cancello == 19)
-    gradi = 0;
-  if (cancello == 111){
-    checkmenu = true;
-    menu = 0;
-  }
+    cancello = Serial.read();
+ // if(inverter == false){
+   if (cancello == 17 && inverter == false){
+   gradi = -1;
+   }
+   else if (cancello == 17 && inverter == true){
+   gradi = 200;
+   }
+   if (cancello == 18 && inverter == false){
+   gradi = 200;
+   }
+   else if (cancello == 18 && inverter == true){
+   gradi = -1;
+   } 
+   if (cancello == 19) gradi = 0;
+   else if (cancello == 111){
+     checkmenu = true;
+     menu = 0;
+   }
 }
 
 void loop(){
   if(passi >= 2200){
+    inverter = !inverter;
     cancello = 19;
     gradi = 0;
     delay(2000);
-    cancello = 18;
+    cancello = 17;
     gradi = 200;
   }
-  if(passi <= 0){
+  else if(passi < 0){
     cancello = 19;
     gradi = 0;
   }
@@ -150,9 +158,14 @@ void loop(){
       gradi = 0;
       Serial.println(19);
       delay(2000);
-      cancello = 17;
-      gradi =- 1;
+      cancello = 18;
+      gradi = 200;
     }
+  }
+  if (gradi != 0){
+    myStepper.step(gradi);
+    if(gradi < 0) passi = passi+1;
+    if(gradi > 0) passi = passi-200;
   }
   //Luci esterne automatiche
   if (automazione == true){
@@ -178,11 +191,6 @@ void loop(){
   if (menu == 14){ //menu cancello
     checkmenu = false;
     Fcancello(); //funzione menu cancello
-  }
-  if (gradi != 0){
-    myStepper.step(gradi);
-    if(gradi < 0) passi = passi+1;
-    if(gradi > 0) passi = passi-200;
   }
 }
 
