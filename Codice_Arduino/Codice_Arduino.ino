@@ -38,7 +38,7 @@ void setup(){
   pinMode(out, OUTPUT);
   myServo.attach(40);
   myStepper.setSpeed(10);
-  myServo.write(5);
+  myServo.write(0);
 }
 
 void Fluci_esterni(){
@@ -140,8 +140,8 @@ void Fcancello()
 
 void Fservomotore(){
   servomotore = Serial.read();
-  if(servomotore == 20 && myServo.read() == 5) myServo.write(168);
-  else if(servomotore == 20) myServo.write(5);
+  if(servomotore == 20 && myServo.read() == 0) myServo.write(90);
+  else if(servomotore == 20) myServo.write(0);
   if(servomotore == 111){
     checkmenu = true;
     menu = 0;
@@ -170,7 +170,7 @@ void loop(){
     tocm=microsecondsToCentimeters(dur);
     if(tocm < 21) {
       cancello = 19;
-      gradi = 0;
+      gradi = 0;  
       Serial.println(19);
       delay(2000);
       cancello = 18;
