@@ -2,6 +2,8 @@
  *  Pulizzi Jose', Maggio Antonino, Lombardo Marco presentano: 
  */
 #include <Stepper.h>
+#include <Servo.h>
+
 #define VIN 5 // V power voltage
 #define R 10000 //ohm resistance value
 const int sensorPin = A0; // Pin fotoresistenza
@@ -12,7 +14,7 @@ bool checkmenu = true, automazione = false, apertura_cancello = false;
 int tastoindietro = 1;
 int lux;
 int cancello = 19;
-Stepper myStepper(2048, 11, 9, 10, 8);
+Stepper myStepper(2048, 11, 9, 10, 8);  //MOTORE STEPPER
 float gradi = 0;
 const int out=12;
 const int in=13;
@@ -22,6 +24,8 @@ long tocm;
 int misure[3];
 int i;
 int passi = 0;
+int servomotore;
+Servo myServo;  // SERVOMOTORE
 boolean inverter = false;
 
 void setup(){
@@ -32,7 +36,9 @@ void setup(){
   pinMode(5, OUTPUT); //luci esterne
   pinMode(in, INPUT);
   pinMode(out, OUTPUT);
+  myServo.attach(40);
   myStepper.setSpeed(10);
+  myServo.write(5);
 }
 
 void Fluci_esterni(){
@@ -113,7 +119,6 @@ void Fluci_interni(){
 void Fcancello()
 {
     cancello = Serial.read();
- // if(inverter == false){
    if (cancello == 17 && inverter == false){
    gradi = -1;
    }
@@ -131,6 +136,16 @@ void Fcancello()
      checkmenu = true;
      menu = 0;
    }
+}
+
+void Fservomotore(){
+  servomotore = Serial.read();
+  if(servomotore == 20 && myServo.read() == 5) myServo.write(168);
+  else if(servomotore == 20) myServo.write(5);
+  if(servomotore == 111){
+    checkmenu = true;
+    menu = 0;
+  }
 }
 
 void loop(){
@@ -183,6 +198,10 @@ void loop(){
   if (menu == 11){ //Menu delle luci interne
     checkmenu = false;
     Fluci_interni(); //Funzione che controlla le luci interne
+  }
+  if(menu == 12){
+    checkmenu = false;
+    Fservomotore();
   }
   if (menu == 13){ //menu luci esterne
     checkmenu = false;
