@@ -26,6 +26,7 @@ int i;
 int passi = 0;
 int servomotore;
 Servo myServo;  // SERVOMOTORE
+boolean debugcancello = false;
 boolean inverter = false;
 
 void setup(){
@@ -119,13 +120,13 @@ void Fluci_interni(){
 void Fcancello()
 {
     cancello = Serial.read();
-   if (cancello == 17){
+   if (cancello == 17 && inverter == false){
    gradi = -1;
    }
    else if (cancello == 17 && inverter == true){
    gradi = 200;
    }
-   if (cancello == 18){
+   if (cancello == 18 && inverter == false){
    gradi = 200;
    }
    else if (cancello == 18 && inverter == true){
@@ -149,20 +150,17 @@ void Fservomotore(){
 }
 
 void loop(){
+  if(gradi > 0) debugcancello = false;
   if(passi >= 2200){
     inverter = !inverter;
-    Fcancello();
-  }
-    /* cancello = 19;
     gradi = 0;
     delay(2000);
-    cancello = 17;
     gradi = 200;
   }
-  else if(passi < 0){
-    cancello = 19;
+  else if(passi < 0 && debugcancello == false){
     gradi = 0;
-  } */
+    debugcancello = true;
+  }
   //Sensore cancello
   if(gradi > 0){
     digitalWrite(out,LOW);
@@ -171,12 +169,10 @@ void loop(){
     dur=pulseIn(in,HIGH);
     tocm=microsecondsToCentimeters(dur);
     if(tocm < 21) {
-      cancello = 19;
       gradi = 0;  
       Serial.println(19);
       delay(2000);
-      cancello = 18;
-      gradi = 200;
+      gradi = -1;
     }
   }
   if (gradi != 0){
