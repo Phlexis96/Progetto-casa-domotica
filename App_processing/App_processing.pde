@@ -262,6 +262,7 @@ public class Button {
       clicked_porta_garage =!clicked_porta_garage;
       a = "ciao2";
       println(a);
+      port.write(12);
     }
   }
   public void clicked_luce_esterno(int mx, int my) {
@@ -401,6 +402,7 @@ public class Button {
     if (mx > x && mx < x + w1 && my > y && my < h3 + y && clicked_porta_garage ==  true && tastogarage ==  true) {
       clicked_porta_garage_apertura =!clicked_porta_garage_apertura;
       a = "ciao9";
+      port.write(20);
       println(a);
     }
   }
