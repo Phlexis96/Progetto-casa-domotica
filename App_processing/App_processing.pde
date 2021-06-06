@@ -16,10 +16,12 @@ boolean clicked_luci_esterno = false;  //luci esterno menù luci esterno
 boolean clicked_automazione = false;  //automazione luci esterno
 boolean clicked_apertura_cancello = false; //tasto per aprire il cancello
 boolean clicked_switch = false; //tasto per cambiare menu
+boolean clicked_menuscene = false; //tasto menu scene
 boolean tastiluci = false;
 boolean tastogarage = false;
 boolean tastoluciesterne = false;
 boolean tastocancello = false;
+boolean tastomenuscene = false;
 int pausacancello = 0;
 String binario = "000";
 int casa_ino = 0;
@@ -98,11 +100,11 @@ void luceinterno() {
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
   textSize(height / 36);
   image(luce,larghezza / 2 - larghezza / 16,altezza / 100,height / 4.8,height / 4.8);  //prima lampadina
-  text("  LUCE\nCUCINA",larghezza / 2 - width / 31,altezza / 5 + altezza / 20);
+  text("    LUCE\nCORRIDOIO",larghezza / 2 - width / 22,altezza / 5 + altezza / 20);
   image(luce,larghezza / 2 - larghezza / 16,altezza / 3 + altezza / 100,height / 4.8,height / 4.8);  //seconda lampadina
-  text("  LUCE\nSALONE",larghezza / 2 - width / 31,altezza / 5 * 2.7 + altezza / 20);
+  text("   LUCE\n GARAGE",larghezza / 2 - width / 25,altezza / 5 * 2.7 + altezza / 20);
   image(luce,larghezza / 2 - larghezza / 16,altezza - altezza / 3 + altezza / 100,height / 4.8,height / 4.8);  //terza lampadina
-  text("   LUCE\n GARAGE",larghezza / 2 - width / 28,altezza / 5 * 4.3 + altezza / 20);
+  text("LUCE\nCASA",larghezza / 2 - width / 45,altezza / 5 * 4.3 + altezza / 20);
   strokeWeight(1);
 }
 
@@ -173,10 +175,21 @@ void tasti2() {
   text("SCENE",larghezza / 5.3,altezza / 10 * 7);
   image(termometro,larghezza / 10 * 6.5,altezza / 4,height / 3.5,height / 3.5);
   text("TEMPERATURA",larghezza / 10 * 6.5,altezza / 10 * 7);
+  fill(50);  //Switch
+  rect(0,0,larghezza,altezza / 25);
+}
+
+void menuscene(){
+  fill(204,101,255);
+  rect(0,0,larghezza,altezza);
+  fill(130);
+  rect(0,altezza - (altezza / 25),larghezza,altezza / 25);
+  fill(0);
+  textSize(height / 57);
+  text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
 }
 
 void draw() {
-  if (a ==  "ciao8") port.write(111);
   primavolta = true;
   if (clicked_switch ==  false) {
     if (clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false) tasti();
@@ -197,7 +210,13 @@ void draw() {
       cancello();
     }
   }
-  else if (clicked_switch ==  true) tasti2();
+  else if (clicked_switch ==  true) {
+    if(clicked_menuscene == false) tasti2();
+    else if(clicked_menuscene == true){
+      tastomenuscene = true;
+      menuscene();
+    }
+  }
 }
 
 
@@ -215,6 +234,7 @@ void mousePressed() {
   Button automazione = new Button(larghezza / 2 + 1,0);
   Button apertura_cancello = new Button(0,0);
   Button Switch = new Button(0,0);
+  Button menuscene = new Button(0,altezza / 25);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -228,6 +248,7 @@ void mousePressed() {
   automazione.clicked_automazione(mouseX,mouseY);
   apertura_cancello.clicked_apertura_cancello(mouseX,mouseY);
   Switch.clicked_switch(mouseX,mouseY);
+  menuscene.clicked_menuscene(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -460,18 +481,28 @@ public class Button {
       println("ciao13");
     }
   }
+  public void clicked_menuscene(int mx, int my) {
+    if (mx > x && mx < x + w1 && my > y && my < h3 + y && clicked_switch == true && clicked_menuscene == false) {
+      clicked_menuscene = !clicked_menuscene;
+      println("ciao14");
+      port.write(21);
+    }
+  }
   public void clicked_indietro(int mx, int my) {
-    if (mx > x && mx < x + w1 && my > y && my < h2 + y && (clicked_luce_interno ==  true || clicked_porta_garage ==  true || clicked_luce_esterno ==  true || clicked_cancello ==  true)) {
+    if (mx > x && mx < x + w && my > y && my < altezza + y && (clicked_luce_interno ==  true || clicked_porta_garage ==  true || clicked_luce_esterno ==  true || clicked_cancello ==  true || clicked_menuscene == true)) {
       if (clicked_luce_interno ==  true) clicked_luce_interno = false;
       if (clicked_porta_garage ==  true) clicked_porta_garage = false;
       if (clicked_luce_esterno ==  true) clicked_luce_esterno = false;
       if (clicked_cancello ==  true) clicked_cancello = false;
+      if(clicked_menuscene == true) clicked_menuscene = false;
       tastoluciesterne = false;
       tastiluci = false;
       tastogarage = false;
       tastocancello = false;
+      tastomenuscene = false;
       a = "ciao8";
       println(a);
+      port.write(111);
     }
   }
 }
