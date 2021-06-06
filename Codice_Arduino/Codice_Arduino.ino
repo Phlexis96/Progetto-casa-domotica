@@ -39,7 +39,7 @@ void setup()
   pinMode(in, INPUT);
   pinMode(out, OUTPUT);
   myServo.attach(40);
-  myStepper.setSpeed(10);
+  myStepper.setSpeed(13);
   myServo.write(0);
 }
 
@@ -189,11 +189,11 @@ void loop()
   //Sensore cancello
   if (gradi > 0)
   {
-    digitalWrite(out, LOW);
-    digitalWrite(out, HIGH);
-    digitalWrite(out, LOW);
-    dur = pulseIn(in, HIGH);
-    tocm = microsecondsToCentimeters(dur);
+    digitalWrite(out,LOW);
+    digitalWrite(out,HIGH);
+    digitalWrite(out,LOW);
+    dur=pulseIn(in,HIGH);
+    tocm=microsecondsToCentimeters(dur);
     if (tocm < 21)
     {
       gradi = 0;
