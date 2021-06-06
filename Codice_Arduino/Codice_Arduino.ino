@@ -13,8 +13,7 @@ int cancello = 19;
 Stepper myStepper(2048, 11, 9, 10, 8);
 float gradi = 0;
 
-void setup()
-{
+void setup(){
   Serial.begin(9600);
   pinMode(2, OUTPUT); //casa primo bit 001.
   pinMode(3, OUTPUT); //corridoio secondo bit 010.
@@ -23,56 +22,46 @@ void setup()
   myStepper.setSpeed(10);
 }
 
-void Fluci_esterni()
-{
+void Fluci_esterni(){
   luci_esterni = Serial.read();
-  if (automazione == false)
-  {
+  if (automazione == false){
     if (luci_esterni == 9)
       digitalWrite(5, HIGH);
     else if (luci_esterni == 10)
       digitalWrite(5, LOW);
   }
-  if (luci_esterni == 15)
-  {
+  if (luci_esterni == 15){
     automazione = false;
     digitalWrite(5, LOW);
   }
-  else if (luci_esterni == 16)
-  {
+  else if (luci_esterni == 16){
     automazione = true;
     digitalWrite(5, LOW);
   }
-  if (luci_esterni == 111)
-  {
+  if (luci_esterni == 111){
     checkmenu = true;
     menu = 0;
   }
 }
 
-void Fluci_interni()
-{
+void Fluci_interni(){
   luci_interni = Serial.read();
-  if (luci_interni == 1)
-  {
+  if (luci_interni == 1){
     digitalWrite(2, LOW);
     digitalWrite(3, LOW);
     digitalWrite(4, LOW);
   }
-  else if (luci_interni == 2)
-  {
+  else if (luci_interni == 2){
     digitalWrite(2, HIGH);
     digitalWrite(3, LOW);
     digitalWrite(4, LOW);
   }
-  else if (luci_interni == 3)
-  {
+  else if (luci_interni == 3){
     digitalWrite(2, LOW);
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
   }
-  else if (luci_interni == 4)
-  {
+  else if (luci_interni == 4){
     digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
     digitalWrite(4, LOW);
@@ -118,41 +107,34 @@ void Fcancello()
     gradi = -1;
   else if (cancello == 19)
     gradi = 0;
-  if (cancello == 111)
-  {
+  if (cancello == 111){
     checkmenu = true;
     menu = 0;
   }
 }
 
-void loop()
-{
+void loop(){
   //Luci esterne automatiche
-  if (automazione == true)
-  {
+  if (automazione == true){
     sensorVal = analogRead(sensorPin);
     if (sensorVal / 5 < 70)
       digitalWrite(5, HIGH);
     else
       digitalWrite(5, LOW);
   }
-  if (checkmenu == true)
-  {
+  if (checkmenu == true){
     if (Serial.available())
       menu = Serial.read();
   }
-  if (menu == 11)
-  { //Menu delle luci interne
+  if (menu == 11){ //Menu delle luci interne
     checkmenu = false;
     Fluci_interni(); //Funzione che controlla le luci interne
   }
-  if (menu == 13)
-  { //menu luci esterne
+  if (menu == 13){ //menu luci esterne
     checkmenu = false;
     Fluci_esterni(); //funzione menu luci esterne
   }
-  if (menu == 14)
-  { //menu cancello
+  if (menu == 14){ //menu cancello
     checkmenu = false;
     Fcancello(); //funzione menu cancello
   }
