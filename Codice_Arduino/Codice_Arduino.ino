@@ -25,13 +25,16 @@ int misure[3];
 int i;
 int passi = 0;
 int servomotore;
+int val;
+int tempPin = 1;
+int menutemperatura;
 Servo myServo; // SERVOMOTORE
 boolean debugcancello = false;
 boolean inverter = false;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(38400);
   pinMode(2, OUTPUT); //casa primo bit 001.
   pinMode(3, OUTPUT); //corridoio secondo bit 010.
   pinMode(4, OUTPUT); //garage terzo bit 100.
@@ -170,6 +173,20 @@ void Fservomotore()
   }
 }
 
+void Ftemperatura()
+{
+  menutemperatura = Serial.read();
+  val = analogRead(tempPin);
+  float mv = ( val/1024.0)*5000;
+  float cel = mv/10;
+  Serial.println(cel);
+  delay(1000);
+  if(menutemperatura == 111)
+  {
+    checkmenu = true;
+    menu = 0;
+  }
+}
 void loop()
 {
   if (gradi > 0)
@@ -197,7 +214,6 @@ void loop()
     if (tocm < 21)
     {
       gradi = 0;
-      Serial.println(19);
       delay(2000);
       gradi = -1;
     }
@@ -244,6 +260,11 @@ void loop()
   { //menu cancello
     checkmenu = false;
     Fcancello(); //funzione menu cancello
+  }
+  if (menu == 33)
+  { //menu temperatura
+    checkmenu = false;
+    Ftemperatura(); //funzione menu temperatura
   }
 }
 

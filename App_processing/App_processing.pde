@@ -16,17 +16,27 @@ boolean clicked_luci_esterno = false;  //luci esterno menù luci esterno
 boolean clicked_automazione = false;  //automazione luci esterno
 boolean clicked_apertura_cancello = false; //tasto per aprire il cancello
 boolean clicked_switch = false; //tasto per cambiare menu
+boolean clicked_switch2 = false; //tasto per cambiare menu
 boolean clicked_menuscene = false; //tasto menu scene
+boolean clicked_menutemperatura = false; //tasto menu temperatura
 boolean tastiluci = false;
 boolean tastogarage = false;
 boolean tastoluciesterne = false;
 boolean tastocancello = false;
 boolean tastomenuscene = false;
+boolean tastoswitch = false;
+boolean tastomenutemperatura = false;
+float temperatura;
+float verticalita;
+int orizzontale;
 int pausacancello = 0;
 String binario = "000";
 int casa_ino = 0;
 int corridoio_ino = 0;
 int garage_ino = 0;
+int random = 0;
+int rosso;
+int verde;
 String a;
 PImage scena;
 PImage termometro;
@@ -38,8 +48,8 @@ Serial port;
 
 void setup() {
   //fullScreen();
-  size(displayWidth,displayHeight);
-  port = new Serial(this, Serial.list()[0], 9600); //Variabile luce
+  size(1920,1080);
+  port = new Serial(this, Serial.list()[0], 38400); //Variabile luce
   scena = loadImage("pngegg.png");
   termometro = loadImage("termometro.png");
   luce = loadImage("luce.png");
@@ -64,6 +74,7 @@ void tasti() {
   rect((larghezza / 2) + 1,(altezza / 2) + 1,larghezza / 2,altezza / 2);
   fill(50);  //Switch
   rect(0,0,larghezza,altezza / 25);
+  rect(0,altezza,larghezza,- altezza / 25);
   fill(0);
   image(luce,larghezza / 5.5,altezza / 12,altezza / 4.11,altezza / 4.11);  //Simbolo lampadina
   textSize(height / 36);
@@ -160,6 +171,7 @@ void cancello() {
 }
 
 void tasti2() {
+  strokeWeight(2);
   fill(0);
   strokeWeight(2);
   stroke(0);
@@ -177,6 +189,8 @@ void tasti2() {
   text("TEMPERATURA",larghezza / 10 * 6.5,altezza / 10 * 7);
   fill(50);  //Switch
   rect(0,0,larghezza,altezza / 25);
+  rect(0,altezza,larghezza,- altezza / 25);
+  strokeWeight(1);
 }
 
 void menuscene(){
@@ -189,32 +203,98 @@ void menuscene(){
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
 }
 
+void menutemperatura(){
+  if(port.available()>0){   
+    temperatura=( float(port.readString().trim()));
+    if(temperatura >50) temperatura=50;
+    else if(temperatura<-20) temperatura=-20;
+  }
+  println(temperatura);
+  verticalita = map(temperatura,0,40,0,altezza - (altezza / 15 * 2));
+  rosso = int(map(temperatura,25,35,0,255));
+  verde = int(map(temperatura,25,35,255,0));
+  if(orizzontale >= larghezza - (larghezza / 15 * 2)){
+    orizzontale = 0;
+    fill(0);
+    rect(0,0,larghezza,altezza - altezza / 25);
+  }
+  for(int i = 0; i <= 40; i++){
+    strokeWeight(0);
+    fill(255,255,255);
+    rect(larghezza/15,altezza - altezza / 15 - ((altezza - (altezza / 15 * 2) )/40*i), larghezza - (larghezza / 15 * 2), 1);  //Rette del grafico
+    strokeWeight(1);
+    fill(255);
+    textSize(15);
+    rect(larghezza/15,altezza - altezza / 15 - ((altezza - (altezza / 15 * 2) )/40*i), - larghezza / 100, altezza/300);  //Trattini per scala gradi
+    text( i + "°C", larghezza/25, altezza - altezza / 16 - ((altezza - (altezza / 15 * 2) )/40*i));  //Scala gradi
+  }
+  fill(rosso,verde,0);
+  strokeWeight(0);
+  if(temperatura > 5 || temperatura < 40){
+    rect(larghezza/15+orizzontale, (altezza - altezza / 15) - verticalita,1,(altezza - altezza / 15) + verticalita);  //GRAFICO
+    orizzontale += 1;
+    fill(0);
+    rect(larghezza/100*45,altezza/20,larghezza/3,-altezza/20);
+    textSize(30);
+    fill(255);
+    text("Temperatura: " + temperatura,larghezza/100*46,altezza/20);
+  }
+  strokeWeight(1);
+  fill(255);
+  rect(larghezza/15,altezza - altezza / 15, larghezza - (larghezza / 15 * 2), altezza/300); //asse x
+  rect(larghezza/15,altezza - altezza / 15, altezza / 300,- (altezza - (altezza / 15 * 2) ) ); //asse y
+  fill(0);
+  rect(larghezza/15,altezza - altezza /15 + altezza/300, larghezza - (larghezza / 15 * 2), altezza/40);
+  fill(130);
+  rect(0,altezza - (altezza / 25),larghezza,altezza / 25);
+  fill(0);
+  textSize(height / 57);
+  text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
+  delay(100);
+}
 void draw() {
-  primavolta = true;
   if (clicked_switch ==  false) {
     if (clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false) tasti();
     else if (clicked_luce_interno ==  true) {
       tastiluci = true;
+      tastoswitch = true;
       luceinterno();
     }
     else if (clicked_porta_garage ==  true) {
+      tastoswitch = true;
       tastogarage = true;
       portagarage();
     }
     else if (clicked_luce_esterno ==  true) {
+      tastoswitch = true;
       tastoluciesterne = true;
       luciesterno();
     }
     else if (clicked_cancello ==  true) {
+      tastoswitch = true;
       tastocancello = true;
       cancello();
     }
   }
   else if (clicked_switch ==  true) {
-    if(clicked_menuscene == false) tasti2();
+    if(clicked_menuscene == false && clicked_menutemperatura == false) {
+      tasti2();
+      orizzontale = 0;
+    }
     else if(clicked_menuscene == true){
+      tastoswitch = true;
       tastomenuscene = true;
       menuscene();
+    }
+    else if(clicked_menutemperatura == true){
+      if(primavolta == false){
+        fill(0);
+        rect(0,0,width,height);
+        primavolta = true;
+      }
+      tastoswitch = true;
+      tastomenutemperatura = true;
+      menutemperatura();
     }
   }
 }
@@ -234,7 +314,9 @@ void mousePressed() {
   Button automazione = new Button(larghezza / 2 + 1,0);
   Button apertura_cancello = new Button(0,0);
   Button Switch = new Button(0,0);
+  Button Switch2 = new Button(0,altezza - altezza/25);
   Button menuscene = new Button(0,altezza / 25);
+  Button menutemperatura = new Button(larghezza/2,altezza / 25);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -248,7 +330,9 @@ void mousePressed() {
   automazione.clicked_automazione(mouseX,mouseY);
   apertura_cancello.clicked_apertura_cancello(mouseX,mouseY);
   Switch.clicked_switch(mouseX,mouseY);
+  Switch2.clicked_switch2(mouseX,mouseY);
   menuscene.clicked_menuscene(mouseX,mouseY);
+  menutemperatura.clicked_menutemperatura(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -287,7 +371,7 @@ public class Button {
     }
   }
   public void clicked_luce_esterno(int mx, int my) {
-    if (mx > x && mx < x + w && my > y && my < h + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
+    if (mx > x && mx < x + w && my > y && my < h - altezza / 25 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_luce_esterno =!clicked_luce_esterno;
       a = "ciao3";
       println(a);
@@ -295,7 +379,7 @@ public class Button {
     }
   }
   public void clicked_cancello(int mx, int my) {
-    if (mx > x && mx < x + w && my > y && my < h + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
+    if (mx > x && mx < x + w && my > y && my < h - altezza / 25 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_cancello =!clicked_cancello;
       a = "ciao4";
       port.write(14);
@@ -476,30 +560,48 @@ public class Button {
     }
   }
   public void clicked_switch(int mx, int my) {
-    if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false) {
+    if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_menuscene == false) {
+      clicked_switch = !clicked_switch;
+      println("ciao13");
+    }
+  }
+  public void clicked_switch2(int mx, int my) {
+    if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_menuscene == false) {
       clicked_switch = !clicked_switch;
       println("ciao13");
     }
   }
   public void clicked_menuscene(int mx, int my) {
-    if (mx > x && mx < x + w1 && my > y && my < h3 + y && clicked_switch == true && clicked_menuscene == false) {
+    if (mx > x && mx < x + w && my > y && my < altezza - (altezza/25*2) + y && clicked_switch == true && clicked_menuscene == false) {
       clicked_menuscene = !clicked_menuscene;
       println("ciao14");
       port.write(21);
     }
   }
+  public void clicked_menutemperatura(int mx, int my){
+    if (mx > x && mx < x + w && my > y && my < altezza - (altezza/25*2) + y && clicked_switch == true && clicked_menutemperatura == false){
+      clicked_menutemperatura = !clicked_menutemperatura;
+      println("ciao15");
+      port.write(33);
+    }
+  }
   public void clicked_indietro(int mx, int my) {
-    if (mx > x && mx < x + w && my > y && my < altezza + y && (clicked_luce_interno ==  true || clicked_porta_garage ==  true || clicked_luce_esterno ==  true || clicked_cancello ==  true || clicked_menuscene == true)) {
+    if (mx > x && mx < x + w1 && my > y && my < altezza - altezza/2 + y && (clicked_luce_interno ==  true || clicked_porta_garage ==  true || clicked_luce_esterno ==  true || clicked_cancello ==  true || clicked_menuscene == true || clicked_menutemperatura == true)) {
       if (clicked_luce_interno ==  true) clicked_luce_interno = false;
       if (clicked_porta_garage ==  true) clicked_porta_garage = false;
       if (clicked_luce_esterno ==  true) clicked_luce_esterno = false;
       if (clicked_cancello ==  true) clicked_cancello = false;
-      if(clicked_menuscene == true) clicked_menuscene = false;
+      if (clicked_menuscene == true) clicked_menuscene = false;
+      if (clicked_menutemperatura == true) clicked_menutemperatura = false;
+      clicked_switch = !clicked_switch;
       tastoluciesterne = false;
       tastiluci = false;
       tastogarage = false;
       tastocancello = false;
       tastomenuscene = false;
+      tastoswitch = false;
+      tastomenutemperatura = false;
+      primavolta = false;
       a = "ciao8";
       println(a);
       port.write(111);
