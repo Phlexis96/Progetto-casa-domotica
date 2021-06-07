@@ -28,6 +28,7 @@ boolean tastoswitch = false;
 boolean tastomenutemperatura = false;
 float temperatura;
 float verticalita;
+float old_temperatura = 0;
 int orizzontale;
 int pausacancello = 0;
 String binario = "000";
@@ -47,8 +48,8 @@ Serial port;
 
 
 void setup() {
-  //fullScreen();
-  size(1920,1080);
+  fullScreen();
+  //size(1920,1080);
   port = new Serial(this, Serial.list()[0], 38400); //Variabile luce
   scena = loadImage("pngegg.png");
   termometro = loadImage("termometro.png");
@@ -230,7 +231,8 @@ void menutemperatura(){
   }
   fill(rosso,verde,0);
   strokeWeight(0);
-  if(temperatura > 5 || temperatura < 40){
+  if((temperatura > old_temperatura - 5 && temperatura < old_temperatura + 5) || old_temperatura == 0){
+    old_temperatura = temperatura;
     rect(larghezza/15+orizzontale, (altezza - altezza / 15) - verticalita,1,(altezza - altezza / 15) + verticalita);  //GRAFICO
     orizzontale += 1;
     fill(0);
