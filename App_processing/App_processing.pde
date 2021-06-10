@@ -120,7 +120,7 @@ void luceinterno() {
   strokeWeight(1);
 }
 
-
+//Funzione per il menu del garage
 void portagarage() {
   int larghezza = width, altezza = height;
   fill(0,100,255);  //blu
@@ -133,7 +133,7 @@ void portagarage() {
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
 }
 
-
+//Funzione per il menu delle luci esterne
 void luciesterno() {
   int larghezza = width, altezza = height;
   if (clicked_luci_esterno ==  true) fill(0,255,50);
@@ -156,7 +156,7 @@ void luciesterno() {
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
 }
 
-
+//Funzione per il menu del cancello
 void cancello() {
   fill(255,0,255);
   rect(0,0,larghezza,altezza - altezza / 25);
@@ -171,6 +171,7 @@ void cancello() {
   strokeWeight(1);
 }
 
+//Funzione per il secondo menu
 void tasti2() {
   strokeWeight(2);
   fill(0);
@@ -194,6 +195,7 @@ void tasti2() {
   strokeWeight(1);
 }
 
+//Funzione per il menu delle scene
 void menuscene(){
   fill(204,101,255);
   rect(0,0,larghezza,altezza);
@@ -204,6 +206,7 @@ void menuscene(){
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
 }
 
+//Funzione per il menu della temperatura
 void menutemperatura(){
   if(port.available()>0){   
     temperatura=( float(port.readString().trim()));
@@ -254,6 +257,8 @@ void menutemperatura(){
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
   delay(100);
 }
+
+
 void draw() {
   if (clicked_switch ==  false) {
     if (clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false) tasti();
@@ -337,7 +342,7 @@ void mousePressed() {
   menutemperatura.clicked_menutemperatura(mouseX,mouseY);
 }
 
-//classe pulsanti menu principale
+//Classe pulsanti
 public class Button {
   int larghezza = width, altezza = height;
   int x,y,w,h,w1,h1,h2,h3;
@@ -356,6 +361,7 @@ public class Button {
     stroke(0);
     rect(x,y,w,h);
   }
+  //Pulsante luci interno nel menu principale
   public void clicked_luce_interno(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < (h - altezza / 25) + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_luce_interno =!clicked_luce_interno;
@@ -364,6 +370,7 @@ public class Button {
       port.write(11);
     }
   }
+  //Pulsante garage nel menu principale
   public void clicked_porta_garage(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < (h - altezza / 25) + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_porta_garage =!clicked_porta_garage;
@@ -372,6 +379,7 @@ public class Button {
       port.write(12);
     }
   }
+  //Pulsante luci esterno nel menu principale
   public void clicked_luce_esterno(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < h - altezza / 25 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_luce_esterno =!clicked_luce_esterno;
@@ -380,6 +388,7 @@ public class Button {
       port.write(13);
     }
   }
+  //Pulsante cancello nel menu principale
   public void clicked_cancello(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < h - altezza / 25 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_switch ==  false) {
       clicked_cancello =!clicked_cancello;
@@ -388,6 +397,7 @@ public class Button {
       println(a);
     }
   }
+  //Pulsante luci cucina nel menu luci interno
   public void clicked_luce_cucina(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h1 + y && clicked_luce_interno ==  true && tastiluci ==  true) {
       clicked_luce_cucina =!clicked_luce_cucina;
@@ -427,6 +437,7 @@ public class Button {
       }
     }
   }
+  //Pulsante luci salone nel menu luci interno
   public void clicked_luce_salone(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h1 + y && clicked_luce_interno ==  true && tastiluci ==  true) {
       clicked_luce_salone =!clicked_luce_salone;
@@ -466,6 +477,7 @@ public class Button {
       }
     }
   }
+  //Pulsante luci garage nel menu luci interno
   public void clicked_luce_garage(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h1 - (altezza / 25) + y && clicked_luce_interno ==  true) {
       clicked_luce_garage =!clicked_luce_garage;
@@ -505,6 +517,7 @@ public class Button {
       }
     }
   }
+  //Pulsante apertura/chiusura garage nel menu del garage
   public void clicked_porta_garage_apertura(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h3 + y && clicked_porta_garage ==  true && tastogarage ==  true) {
       clicked_porta_garage_apertura =!clicked_porta_garage_apertura;
@@ -513,6 +526,7 @@ public class Button {
       println(a);
     }
   }
+  //Pulsante accensione/spegnimento luci esterne nel menu luci esterno
   public void clicked_luci_esterno(int mx, int my) {
     if (mx > x && mx < x + larghezza / 2 - 1 && my > y && my < h3 + y && clicked_luce_esterno ==  true && tastoluciesterne ==  true && clicked_automazione ==  false) {
       clicked_luci_esterno =!clicked_luci_esterno;
@@ -522,6 +536,7 @@ public class Button {
       else port.write(10);
     }
   }
+  //Pulsante automazioni luci esterne nel menu luci esterne
   public void clicked_automazione(int mx, int my) {
     if (mx > x && mx < x + larghezza / 2 - 1 && my > y && my < h3 + y && clicked_luce_esterno ==  true && tastoluciesterne ==  true) {
       clicked_automazione =!clicked_automazione;
@@ -534,6 +549,7 @@ public class Button {
       else if (clicked_automazione ==  false) port.write(15);
     }
   }
+  //Pulsante apertura/chiusura cancello nel menu cancello
   public void clicked_apertura_cancello(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h3 + y && clicked_cancello ==  true && tastocancello ==  true) {
       clicked_apertura_cancello =!clicked_apertura_cancello;
@@ -561,18 +577,21 @@ public class Button {
       }
     }
   }
+  //Pulsante per cambiare menu (sopra)
   public void clicked_switch(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_menuscene == false) {
       clicked_switch = !clicked_switch;
       println("ciao13");
     }
   }
+  //Pulsante per cambiare menu (sotto)
   public void clicked_switch2(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_menuscene == false) {
       clicked_switch = !clicked_switch;
       println("ciao13");
     }
   }
+  //Pulsante menu delle scene nel secondo menu principale
   public void clicked_menuscene(int mx, int my) {
     if (mx > x && mx < x + w && my > y && my < altezza - (altezza/25*2) + y && clicked_switch == true && clicked_menuscene == false) {
       clicked_menuscene = !clicked_menuscene;
@@ -580,6 +599,7 @@ public class Button {
       port.write(21);
     }
   }
+  //Pulsante menu della temperatura nel secondo menu principale
   public void clicked_menutemperatura(int mx, int my){
     if (mx > x && mx < x + w && my > y && my < altezza - (altezza/25*2) + y && clicked_switch == true && clicked_menutemperatura == false){
       clicked_menutemperatura = !clicked_menutemperatura;
@@ -587,6 +607,7 @@ public class Button {
       port.write(33);
     }
   }
+  //Pulsante per tornare indietro da qualsiasi sotto-menu
   public void clicked_indietro(int mx, int my) {
     if (mx > x && mx < x + w1 && my > y && my < altezza - altezza/2 + y && (clicked_luce_interno ==  true || clicked_porta_garage ==  true || clicked_luce_esterno ==  true || clicked_cancello ==  true || clicked_menuscene == true || clicked_menutemperatura == true)) {
       if (clicked_luce_interno ==  true) clicked_luce_interno = false;
