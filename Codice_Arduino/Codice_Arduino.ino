@@ -31,6 +31,7 @@ int menutemperatura;
 Servo myServo; // SERVOMOTORE
 boolean debugcancello = false;
 boolean inverter = false;
+int start = 159;
 
 void setup()
 {
@@ -43,7 +44,7 @@ void setup()
   pinMode(out, OUTPUT);
   myServo.attach(40);
   myStepper.setSpeed(13);
-  myServo.write(0);
+  myServo.write(start);
 }
 
 void Fluci_esterni()
@@ -162,10 +163,10 @@ void Fcancello()
 void Fservomotore()
 {
   servomotore = Serial.read();
-  if (servomotore == 20 && myServo.read() == 0)
-    myServo.write(90);
+  if (servomotore == 20 && myServo.read() == 75)
+    myServo.write(start);
   else if (servomotore == 20)
-    myServo.write(0);
+    myServo.write(75);
   if (servomotore == 111)
   {
     checkmenu = true;
@@ -211,7 +212,7 @@ void loop()
     digitalWrite(out,LOW);
     dur=pulseIn(in,HIGH);
     tocm=microsecondsToCentimeters(dur);
-    if (tocm < 21)
+    if (tocm < 16)
     {
       gradi = 0;
       delay(2000);
