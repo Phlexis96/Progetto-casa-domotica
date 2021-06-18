@@ -56,7 +56,7 @@ Serial port;
 void setup() {
   //fullScreen();
   size(1920,1080);
-  port = new Serial(this, Serial.list()[0], 38400); //Variabile luce
+  port = new Serial(this, Serial.list()[1], 38400); //Variabile luce
   scena = loadImage("pngegg.png");
   termometro = loadImage("termometro.png");
   luce = loadImage("luce.png");
@@ -672,6 +672,7 @@ public class Button {
       tastoswitch = false;
       tastomenutemperatura = false;
       primavolta = false;
+      old_temperatura = 0;
       a = "ciao8";
       println(a);
       port.write(111);
