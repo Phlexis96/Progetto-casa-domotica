@@ -19,6 +19,10 @@ boolean clicked_switch = false; //tasto per cambiare menu
 boolean clicked_switch2 = false; //tasto per cambiare menu
 boolean clicked_menuscene = false; //tasto menu scene
 boolean clicked_menutemperatura = false; //tasto menu temperatura
+boolean clicked_entrata = false;
+boolean clicked_uscita = false;
+boolean clicked_giorno = false;
+boolean clicked_notte = false;
 boolean tastiluci = false;
 boolean tastogarage = false;
 boolean tastoluciesterne = false;
@@ -195,13 +199,18 @@ void tasti2() {
 }
 
 void menuscene(){
+  strokeWeight(2);
   fill(204,101,255);
-  rect(0,0,larghezza,altezza);
+  rect(0,0,larghezza/2,altezza/2-altezza/25);
+  rect(0,altezza/2-altezza/25,larghezza/2,altezza/2);
+  rect(larghezza/2,0,larghezza/2,altezza/2-altezza/25);
+  rect(larghezza/2,altezza/2-altezza/25,larghezza/2,altezza/2);
   fill(130);
   rect(0,altezza - (altezza / 25),larghezza,altezza / 25);
   fill(0);
   textSize(height / 57);
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
+  
 }
 
 void menutemperatura(){
@@ -211,8 +220,8 @@ void menutemperatura(){
   }
   println(temperatura);
   verticalita = map(temperatura,0,40,0,altezza - (altezza / 15 * 2));
-  rosso = int(map(temperatura,25,35,0,255));
-  verde = int(map(temperatura,25,35,255,0));
+  rosso = int(map(temperatura,27,32,0,255));
+  verde = int(map(temperatura,27,32,255,0));
   if(orizzontale >= larghezza - (larghezza / 15 * 2)){
     orizzontale = 0;
     fill(0);
@@ -318,6 +327,10 @@ void mousePressed() {
   Button Switch2 = new Button(0,altezza - altezza/25);
   Button menuscene = new Button(0,altezza / 25);
   Button menutemperatura = new Button(larghezza/2,altezza / 25);
+  Button giorno = new Button(0,0);
+  Button notte = new Button(0, altezza/2 - altezza/25);
+  Button entrata = new Button(larghezza/2, 0);
+  Button uscita = new Button(larghezza / 2, altezza/2 - altezza/25);
   luceinterno.clicked_luce_interno(mouseX,mouseY);
   portagarage.clicked_porta_garage(mouseX,mouseY);
   luceesterno.clicked_luce_esterno(mouseX,mouseY);
@@ -334,6 +347,10 @@ void mousePressed() {
   Switch2.clicked_switch2(mouseX,mouseY);
   menuscene.clicked_menuscene(mouseX,mouseY);
   menutemperatura.clicked_menutemperatura(mouseX,mouseY);
+  giorno.clicked_giorno(mouseX,mouseY);
+  notte.clicked_notte(mouseX,mouseY);
+  entrata.clicked_entrata(mouseX,mouseY);
+  uscita.clicked_uscita(mouseX,mouseY);
 }
 
 //classe pulsanti menu principale
@@ -570,6 +587,48 @@ public class Button {
     if (mx > x && mx < x + w1 && my > y && my < h2 + y && clicked_luce_interno ==  false && clicked_porta_garage ==  false && clicked_luce_esterno ==  false && clicked_cancello ==  false && clicked_menuscene == false) {
       clicked_switch = !clicked_switch;
       println("ciao13");
+    }
+  }
+  public void clicked_giorno(int mx, int my) {
+    if (mx > x && mx < x + larghezza/2 && my > y && my < altezza/2-altezza/25+ y && clicked_menuscene == true) {
+      clicked_giorno = !clicked_giorno;
+      println("ciaogiorno");
+      casa_ino = 0;
+      garage_ino = 0;
+      corridoio_ino = 0;
+      clicked_luce_salone = false;
+      clicked_luce_cucina = false;
+      clicked_luce_garage = false;
+      clicked_luci_esterno = false;
+      port.write(71);
+    }
+  }
+  public void clicked_notte(int mx, int my) {
+    if (mx > x && mx < x + larghezza/2 && my > y && my < altezza/2-altezza/25+ y && clicked_menuscene == true) {
+      clicked_notte = !clicked_notte;
+      println("ciaonotte");
+      casa_ino = 1;
+      garage_ino = 1;
+      corridoio_ino = 1;
+      clicked_luce_salone = true;
+      clicked_luce_cucina = true;
+      clicked_luce_garage = true;
+      clicked_luci_esterno = true;
+      port.write(72);
+    }
+  }
+  public void clicked_entrata(int mx, int my) {
+    if (mx > x && mx < x + larghezza/2 && my > y && my < altezza/2-altezza/25+ y && clicked_menuscene == true) {
+      clicked_entrata = !clicked_entrata;
+      println("ciaoentrata");
+      port.write(73);
+    }
+  }
+  public void clicked_uscita(int mx, int my) {
+    if (mx > x && mx < x + larghezza/2 && my > y && my < altezza/2-altezza/25+ y && clicked_menuscene == true) {
+      clicked_uscita = !clicked_uscita;
+      println("ciaouscita");
+      port.write(74);
     }
   }
   public void clicked_menuscene(int mx, int my) {
