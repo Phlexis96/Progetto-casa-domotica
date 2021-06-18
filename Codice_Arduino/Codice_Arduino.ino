@@ -28,6 +28,7 @@ int servomotore;
 int val;
 int tempPin = 1;
 int menutemperatura;
+int menuscene;
 Servo myServo; // SERVOMOTORE
 boolean debugcancello = false;
 boolean inverter = false;
@@ -43,7 +44,7 @@ void setup()
   pinMode(in, INPUT);
   pinMode(out, OUTPUT);
   myServo.attach(40);
-  myStepper.setSpeed(13);
+  myStepper.setSpeed(8);
   myServo.write(start);
 }
 
@@ -188,11 +189,80 @@ void Ftemperatura()
     menu = 0;
   }
 }
+
+void Fmenuscene()
+{
+  menuscene = Serial.read();
+  if(menuscene == 71)
+  {
+    digitalWrite(5,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    digitalWrite(4,LOW);
+  }
+  else if(menuscene == 72)
+  {
+    digitalWrite(5,HIGH);
+    digitalWrite(2,HIGH);
+    digitalWrite(3,HIGH);
+    digitalWrite(4,HIGH);
+  }
+  else if(menuscene == 73)
+  {
+    while(passi <= 2400)
+    {
+      gradi = -1;
+      passi += 1;
+      myStepper.step(gradi);
+    }
+    delay(300);
+    myServo.write(75);
+    delay(300);
+    while(passi >= 0)
+    {
+      gradi = 200;
+      passi -= 200;
+      myStepper.step(gradi);
+    }
+    delay(300);
+    myServo.write(start);
+    delay(300);
+    menuscene = 0;
+    gradi = 0;
+  }
+  else if(menuscene == 74)
+  {
+    myServo.write(75);
+    delay(300);
+    while(passi <= 2400)
+    {
+      gradi = -1;
+      passi += 1;
+      myStepper.step(gradi);
+    }
+    delay(300);
+    myServo.write(start);
+    delay(300);
+    while(passi >= 0)
+    {
+      gradi = 200;
+      passi -= 200;
+      myStepper.step(gradi);
+    }
+    menuscene = 0;
+    gradi = 0;
+  }
+  else if(menuscene == 111)
+  {
+    checkmenu = true;
+    menu = 0;
+  }
+}
 void loop()
 {
   if (gradi > 0)
     debugcancello = false;
-  if (passi >= 2200)
+  if (passi >= 2400)
   {
     inverter = !inverter;
     gradi = 0;
@@ -212,7 +282,7 @@ void loop()
     digitalWrite(out,LOW);
     dur=pulseIn(in,HIGH);
     tocm=microsecondsToCentimeters(dur);
-    if (tocm < 16)
+    if (tocm < 16 && tocm > 5)
     {
       gradi = 0;
       delay(2000);
@@ -232,7 +302,7 @@ void loop()
   {
     sensorVal = analogRead(sensorPin);
     lux = sensorRawToPhys(sensorVal);
-    if (lux < 60)
+    if (lux < 70)
       digitalWrite(5, HIGH);
     else
       digitalWrite(5, LOW);
@@ -266,6 +336,11 @@ void loop()
   { //menu temperatura
     checkmenu = false;
     Ftemperatura(); //funzione menu temperatura
+  }
+  if (menu == 21)
+  {
+    checkmenu = false;
+    Fmenuscene();  //Funzione menu scene
   }
 }
 
