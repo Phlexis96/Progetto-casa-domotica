@@ -48,6 +48,8 @@ PImage termometro;
 PImage luce;
 PImage cancello;
 PImage garage;
+PImage sole;
+PImage luna;
 Serial port;
 
 
@@ -60,6 +62,8 @@ void setup() {
   luce = loadImage("luce.png");
   cancello = loadImage("cancello.png");
   garage = loadImage("garage.png");
+  sole = loadImage("sole.png");
+  luna = loadImage("moon.png");
   background(0);
 }
 
@@ -210,7 +214,13 @@ void menuscene(){
   fill(0);
   textSize(height / 57);
   text(" INDIETRO",larghezza / 2 - height / 22.15,altezza - height / 72);
-  
+  textSize(height/20);
+  image(sole,larghezza/100*20,altezza/100*10,height/5,height/5);
+  text("GIORNO",larghezza/100*20,altezza/100*40);
+  image(luna,larghezza/100*21,altezza/100*63,height/6,height/6);
+  text(" NOTTE",larghezza/100*20,altezza/100*93);
+  text(" USCITA",larghezza/100*70,altezza/100*93);
+  text("ENTRATA",larghezza/100*70,altezza/100*40);
 }
 
 void menutemperatura(){
